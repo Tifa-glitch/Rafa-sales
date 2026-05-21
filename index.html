@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>拉法業務週報 — 管理層</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap');
+  :root {
+    --red:#c0152a; --red-light:rgba(192,21,42,.08); --red-border:rgba(192,21,42,.2);
+    --bg:#f2f2f2; --card:#fff; --border:#e4e4e4; --text:#111; --sub:#555; --faint:#aaa;
+    --green:#1a7a42; --green-bg:#e8f7ef; --amber:#a85400; --amber-bg:#fff3e0;
+    --bad-bg:#fff3f4; --blue:#1e4fbb; --blue-bg:#eef2ff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+  body{font-family:'Noto Sans TC',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;max-width:480px;margin:0 auto}
+
+  /* HEADER */
+  .hdr{background:var(--red);color:#fff;padding:16px 18px 14px}
+  .hdr-top{display:flex;align-items:flex-start;justify-content:space-between}
+  .hdr-co{font-size:10px;letter-spacing:2.5px;opacity:.55;text-transform:uppercase;margin-bottom:3px}
+  .hdr-title{font-size:18px;font-weight:900;letter-spacing:.3px}
+  .hdr-date{font-family:'IBM Plex Mono',monospace;font-size:11px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;padding:4px 8px;border-radius:5px;text-align:center;margin-top:2px}
+  .hdr-date input[type=date]{background:transparent;border:none;color:#fff;font-family:'IBM Plex Mono',monospace;font-size:11px;padding:0;width:110px}
+  .hdr-date input[type=date]::-webkit-calendar-picker-indicator{filter:invert(1);opacity:.6;width:13px}
+
+  /* STATUS BAR */
+  .statusbar{background:#fff;border-bottom:1px solid var(--border);padding:7px 14px;display:flex;align-items:center;justify-content:space-between;font-size:11px;color:var(--faint)}
+  .statusbar .dot{width:7px;height:7px;border-radius:50%;background:#ccc;display:inline-block;margin-right:5px;vertical-align:middle}
+  .statusbar .dot.live{background:var(--green)}
+  .statusbar a{color:var(--faint);font-size:11px}
+  .statusbar .refresh-btn{background:none;border:1px solid var(--border);border-radius:4px;padding:2px 8px;font-size:10px;cursor:pointer;color:var(--sub)}
+
+  /* PERIOD PILLS */
+  .pbar{background:#fff;border-bottom:1px solid var(--border);padding:10px 14px;display:flex;gap:7px;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .pbar::-webkit-scrollbar{display:none}
+  .pbar-lbl{font-size:11px;color:var(--sub);font-weight:700;white-space:nowrap;margin-right:2px}
+  .pbtn{padding:6px 15px;border:1.5px solid var(--border);background:#fff;border-radius:20px;font-size:13px;font-family:'Noto Sans TC',sans-serif;cursor:pointer;color:var(--sub);font-weight:600;white-space:nowrap;flex-shrink:0}
+  .pbtn.on{background:var(--red);border-color:var(--red);color:#fff}
+
+  /* MAIN */
+  .main{padding:14px 14px 40px}
+
+  /* SUMMARY CARDS */
+  .sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+  .sum-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:13px 14px;position:relative;overflow:hidden;cursor:pointer;transition:border-color .15s}
+  .sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--red)}
+  .sum-card.active-card{border-color:var(--red);box-shadow:0 0 0 2px var(--red-border)}
+  .sum-lbl{font-size:10px;letter-spacing:1px;color:var(--faint);font-weight:700;text-transform:uppercase;margin-bottom:6px}
+  .sum-val{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;line-height:1}
+  .sum-val .u{font-size:14px;font-weight:400;color:var(--sub)}
+  .sum-sub{font-size:10.5px;color:var(--faint);margin-top:5px;font-family:'IBM Plex Mono',monospace}
+  .sum-na{font-size:13px;color:var(--faint);font-style:italic}
+
+  /* CHANNEL TABS */
+  .ch-tabs{display:flex;background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:12px}
+  .ch-tab{flex:1;padding:11px 8px;text-align:center;font-size:14px;font-weight:700;color:var(--sub);cursor:pointer;border-bottom:3px solid transparent;transition:all .15s}
+  .ch-tab.on{color:var(--red);border-bottom-color:var(--red);background:#fff9f9}
+
+  /* SUB TABS */
+  .sub-tabs{display:flex;gap:7px;margin-bottom:13px}
+  .sub-tab{flex:1;padding:9px 8px;text-align:center;font-size:13px;font-weight:700;color:var(--sub);background:#fff;border:1.5px solid var(--border);border-radius:8px;cursor:pointer}
+  .sub-tab.on{color:var(--red);border-color:var(--red);background:#fff9f9}
+
+  /* PANE */
+  .pane{display:none}.pane.on{display:block}
+
+  /* REGION HEADER */
+  .rgn-hdr{font-size:11px;font-weight:800;letter-spacing:2.5px;color:var(--red);text-transform:uppercase;padding:7px 4px 5px}
+
+  /* REP CARD */
+  .rep-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:9px}
+  .rep-card.miss{opacity:.55}
+  .rep-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px}
+  .rep-name{font-size:17px;font-weight:800}
+  .rep-badge{display:inline-flex;align-items:center;justify-content:center;padding:5px 14px;border-radius:20px;font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700}
+  .b-na{background:#f2f2f2;color:var(--faint);font-style:italic;font-family:'Noto Sans TC',sans-serif;font-size:12px;padding:5px 10px}
+  .b-good{background:var(--green-bg);color:var(--green)}
+  .b-mid{background:var(--amber-bg);color:var(--amber)}
+  .b-bad{background:var(--bad-bg);color:var(--red)}
+
+  /* Progress */
+  .prog-wrap{margin-bottom:12px}
+  .prog-bg{height:8px;background:#ebebeb;border-radius:99px;overflow:hidden}
+  .prog-fill{height:100%;border-radius:99px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+
+  /* Numbers row */
+  .rep-nums{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .rep-num-lbl{font-size:10px;color:var(--faint);font-weight:700;letter-spacing:.8px;text-transform:uppercase;margin-bottom:3px}
+  .rep-num-val{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:700;color:var(--text)}
+  .rep-num-val.act-val{color:var(--red)}
+  .rep-num-val.na-val{color:var(--faint);font-size:15px;font-style:italic;font-family:'Noto Sans TC',sans-serif}
+
+  /* Editable input */
+  .num-input{font-family:'IBM Plex Mono',monospace;font-size:19px;font-weight:700;color:var(--red);background:transparent;border:none;border-bottom:2px dashed var(--red-border);width:100%;padding:0 0 2px;outline:none;-webkit-appearance:none}
+  .num-input::placeholder{color:var(--faint);font-style:italic;font-weight:400;font-size:14px}
+  .num-input:focus{border-bottom-color:var(--red)}
+
+  /* YTD */
+  .ytd-toggle{margin-top:10px;padding-top:9px;border-top:1px dashed var(--border);display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-size:11px;color:var(--faint);font-weight:600;letter-spacing:.5px}
+  .ytd-toggle .arr{transition:transform .2s;font-size:10px}
+  .ytd-toggle.open .arr{transform:rotate(180deg)}
+  .ytd-body{display:none;padding-top:10px}
+  .ytd-body.open{display:block}
+  .ytd-nums{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+  .ytd-num-lbl{font-size:10px;color:var(--faint);font-weight:700;letter-spacing:.5px;margin-bottom:3px}
+  .ytd-num-val{font-family:'IBM Plex Mono',monospace;font-size:15px;font-weight:700}
+  .ytd-26{color:var(--blue)}.ytd-25{color:#999}
+  .yoy{font-size:15px;font-weight:700}
+  .yu{color:var(--green)}.yd{color:var(--red)}.yf{color:var(--faint)}
+
+  /* Total card */
+  .tot-card{background:#f5f5f5;border:2px solid var(--border);border-radius:12px;padding:14px 16px;margin-top:4px}
+  .tot-card .rep-name{color:var(--sub);font-size:14px;letter-spacing:1px}
+
+  /* Legend */
+  .legend{display:flex;gap:12px;flex-wrap:wrap;margin-top:16px;padding:10px 4px 0;border-top:1px solid var(--border);font-size:11px;color:var(--sub)}
+  .leg-i{display:flex;align-items:center;gap:5px}
+  .leg-d{width:8px;height:8px;border-radius:50%}
+
+  /* Loading / error */
+  .loading-overlay{position:fixed;inset:0;background:rgba(255,255,255,.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99;gap:12px}
+  .spinner{width:36px;height:36px;border:3px solid var(--red-border);border-top-color:var(--red);border-radius:50%;animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loading-txt{font-size:13px;color:var(--sub)}
+  .error-banner{background:#fff3f4;border:1px solid var(--red-border);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:14px;display:none}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-top">
+    <div>
+      <div class="hdr-co">拉法 Rafa · 管理層報告</div>
+      <div class="hdr-title">業務淨銷週報</div>
+    </div>
+    <div class="hdr-date">
+      <input type="date" id="rptDate">
+    </div>
+  </div>
+</div>
+
+<!-- STATUS BAR -->
+<div class="statusbar">
+  <div><span class="dot" id="syncDot"></span><span id="syncTxt">讀取中…</span></div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="refresh-btn" onclick="loadData()">↻ 重新整理</button>
+    <a href="#" onclick="clearAll(event)">清除手動</a>
+  </div>
+</div>
+
+<!-- PERIOD PILLS -->
+<div class="pbar">
+  <span class="pbar-lbl">週期</span>
+  <button class="pbtn on"  onclick="setPeriod(this,'5-6')">5–6月</button>
+  <button class="pbtn"     onclick="setPeriod(this,'7-8')">7–8月</button>
+  <button class="pbtn"     onclick="setPeriod(this,'9-10')">9–10月</button>
+  <button class="pbtn"     onclick="setPeriod(this,'11-12')">11–12月</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="error-banner" id="errBanner"></div>
+
+  <!-- Summary Cards -->
+  <div class="sum-grid">
+    <div class="sum-card active-card" id="card-trad-ns" onclick="jumpTo('trad','ns')">
+      <div class="sum-lbl">傳統淨銷</div>
+      <div class="sum-val" id="c0"><span class="sum-na">—</span></div>
+      <div class="sum-sub" id="c0s"></div>
+    </div>
+    <div class="sum-card" id="card-chain-ns" onclick="jumpTo('chain','ns')">
+      <div class="sum-lbl">連鎖淨銷</div>
+      <div class="sum-val" id="c1"><span class="sum-na">—</span></div>
+      <div class="sum-sub" id="c1s"></div>
+    </div>
+    <div class="sum-card" id="card-trad-coll" onclick="jumpTo('trad','coll')">
+      <div class="sum-lbl">傳統收款</div>
+      <div class="sum-val" id="c2"><span class="sum-na">待輸入</span></div>
+      <div class="sum-sub" id="c2s"></div>
+    </div>
+    <div class="sum-card" id="card-chain-coll" onclick="jumpTo('chain','coll')">
+      <div class="sum-lbl">連鎖收款</div>
+      <div class="sum-val" id="c3"><span class="sum-na">待輸入</span></div>
+      <div class="sum-sub" id="c3s"></div>
+    </div>
+  </div>
+
+  <!-- Channel Tabs -->
+  <div class="ch-tabs">
+    <div class="ch-tab on" id="l1-trad"  onclick="switchChannel('trad',this)">傳統通路</div>
+    <div class="ch-tab"    id="l1-chain" onclick="switchChannel('chain',this)">連鎖通路</div>
+  </div>
+
+  <!-- TRAD -->
+  <div id="ch-trad">
+    <div class="sub-tabs">
+      <div class="sub-tab on" id="l2-trad-ns"   onclick="switchSub('trad','ns',this)">淨銷</div>
+      <div class="sub-tab"    id="l2-trad-coll"  onclick="switchSub('trad','coll',this)">收款</div>
+    </div>
+    <div class="pane on" id="p-trad-ns"><div id="cards-trad-ns"></div><div class="legend" id="leg-trad-ns"></div></div>
+    <div class="pane"    id="p-trad-coll"><div id="cards-trad-coll"></div><div class="legend" id="leg-trad-coll"></div></div>
+  </div>
+
+  <!-- CHAIN -->
+  <div id="ch-chain" style="display:none">
+    <div class="sub-tabs">
+      <div class="sub-tab on" id="l2-chain-ns"   onclick="switchSub('chain','ns',this)">淨銷</div>
+      <div class="sub-tab"    id="l2-chain-coll"  onclick="switchSub('chain','coll',this)">收款</div>
+    </div>
+    <div class="pane on" id="p-chain-ns"><div id="cards-chain-ns"></div><div class="legend" id="leg-chain-ns"></div></div>
+    <div class="pane"    id="p-chain-coll"><div id="cards-chain-coll"></div><div class="legend" id="leg-chain-coll"></div></div>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loadOverlay">
+  <div class="spinner"></div>
+  <div class="loading-txt">讀取 Google Sheets…</div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// ⚙️  設定：填入 Apps Script 部署網址
+// ══════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNfTddWozs9kZbRdI3cgztaPXXhCD5Xi_Cef-llYTDAJWsWF5RP3rdopR1dmJHsIBH/exec';
+
+// ══════════════════════════════════════════════════════
+// 固定設定（人員、區域、歷史）
+// ══════════════════════════════════════════════════════
+const ROSTER = [
+  {region:'北區', name:'謝明祥'},
+  {region:'北區', name:'連國廷'},
+  {region:'北區', name:'洪裕銘'},
+  {region:'桃竹', name:'缺區', miss:true},
+  {region:'中區', name:'徐瑞廷'},
+  {region:'中區', name:'何星諺'},
+  {region:'南區', name:'許峯閔'},
+  {region:'南區', name:'陳其宏'},
+  {region:'南區', name:'缺區', miss:true},
+];
+
+// ytdN = 到該週期第一個月為止要加幾個月（1-based month index）
+const PERIOD_META = {
+  '5-6':  {label:'5–6月',  ytdN:5},
+  '7-8':  {label:'7–8月',  ytdN:7},
+  '9-10': {label:'9–10月', ytdN:9},
+  '11-12':{label:'11–12月',ytdN:11},
+};
+
+// ══════════════════════════════════════════════════════
+// State
+// ══════════════════════════════════════════════════════
+let curP = '5-6';
+let curChannel = 'trad';
+let curSub = {trad:'ns', chain:'ns'};
+let sheetsData = null; // {inputData, targets, monthly}
+
+// ══════════════════════════════════════════════════════
+// Load from Apps Script
+// ══════════════════════════════════════════════════════
+async function loadData() {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbwNfTddWozs9kZbRdI3cgztaPXXhCD5Xi_Cef-llYTDAJWsWF5RP3rdopR1dmJHsIBH/exec') {
+    setSyncState('warn', '尚未連接 Google Sheets（使用示範資料）');
+    sheetsData = null;
+    renderAll();
+    hideLoading();
+    return;
+  }
+  showLoading();
+  setSyncState('loading', '讀取中…');
+  try {
+    const res = await fetch(APPS_SCRIPT_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    sheetsData = await res.json();
+    setSyncState('ok', '已同步 ' + new Date().toLocaleTimeString('zh-TW',{hour:'2-digit',minute:'2-digit'}));
+    hideError();
+  } catch(e) {
+    setSyncState('err', '無法連線 Sheets');
+    showError('無法讀取 Google Sheets：' + e.message + '。顯示手動輸入或示範資料。');
+    sheetsData = null;
+  }
+  renderAll();
+  hideLoading();
+}
+
+function showLoading() { document.getElementById('loadOverlay').style.display='flex'; }
+function hideLoading() { document.getElementById('loadOverlay').style.display='none'; }
+function showError(msg){ const b=document.getElementById('errBanner'); b.textContent=msg; b.style.display='block'; }
+function hideError()   { document.getElementById('errBanner').style.display='none'; }
+function setSyncState(state, txt) {
+  const dot = document.getElementById('syncDot');
+  const t   = document.getElementById('syncTxt');
+  dot.className = 'dot' + (state==='ok'?' live':'');
+  t.textContent = txt;
+}
+
+// ══════════════════════════════════════════════════════
+// Get actual value for a rep/type from sheetsData or fallback
+// ══════════════════════════════════════════════════════
+function getActual(rep, metricKey) {
+  const rKey = rep.miss ? rep.region + '缺區' : rep.name;
+  // 1. Check manual override in localStorage
+  const manual = loadManual()[metricKey + '_' + rKey];
+  if (manual !== undefined && manual !== '') return Number(manual);
+  // 2. From Sheets inputData
+  if (sheetsData && sheetsData.inputData) {
+    // find matching row for this period + name
+    const rows = sheetsData.inputData.filter(r => r.period === curP && r.name === rep.name);
+    if (rows.length) {
+      const latest = rows[rows.length - 1]; // last entry wins
+      if (metricKey === 'tradNs'   && latest.tradNs   !== null) return latest.tradNs;
+      if (metricKey === 'chainNs'  && latest.chainNs  !== null) return latest.chainNs;
+      if (metricKey === 'tradColl' && latest.tradColl !== null) return latest.tradColl;
+      if (metricKey === 'chainColl'&& latest.chainColl!== null) return latest.chainColl;
+    }
+  }
+  // 3. Fallback seed data (for demo / before Sheets connected)
+  return SEED[metricKey]?.[rKey] ?? '';
+}
+
+function getTarget(name, metricKey) {
+  if (sheetsData && sheetsData.targets && sheetsData.targets[name]) {
+    return sheetsData.targets[name][curP]?.[metricKey] ?? null;
+  }
+  return TGTS[curP]?.[metricKey]?.[name] ?? null;
+}
+
+function getMonthly(name, channel) {
+  // channel = 'trad' | 'chain'
+  const chName = channel === 'trad' ? '傳統' : '連鎖';
+  if (sheetsData && sheetsData.monthly) {
+    const key = chName + '_' + name;
+    return sheetsData.monthly[key] || null;
+  }
+  // Fallback built-in
+  return MONTHLY[channel]?.[name] || null;
+}
+
+// ══════════════════════════════════════════════════════
+// Seed / fallback data
+// ══════════════════════════════════════════════════════
+const SEED = {
+  tradNs:   {'謝明祥':132367,'連國廷':77408,'洪裕銘':192777,'桃竹缺區':152381,'徐瑞廷':97652,'何星諺':117278,'許峯閔':100358,'陳其宏':131647,'南區缺區':68973},
+  chainNs:  {'謝明祥':130994,'連國廷':627552,'洪裕銘':44068,'桃竹缺區':97618,'徐瑞廷':417382,'何星諺':50004,'許峯閔':58700,'陳其宏':506726,'南區缺區':36631},
+  tradColl: {},
+  chainColl:{},
+};
+
+const TGTS = {
+  '5-6': {
+    tradNs:   {'謝明祥':558888,'連國廷':552394,'洪裕銘':754225,'徐瑞廷':616194,'何星諺':552394,'許峯閔':552394,'陳其宏':552394},
+    chainNs:  {'謝明祥':487369,'連國廷':5157867,'洪裕銘':1969001,'徐瑞廷':1258352,'何星諺':351969,'許峯閔':266103,'陳其宏':1074125},
+    tradColl: {'謝明祥':347789,'連國廷':254085,'洪裕銘':374313,'徐瑞廷':352581,'何星諺':362629,'許峯閔':276655,'陳其宏':288102},
+    chainColl:{},
+  },
+  '7-8':  {tradNs:{},chainNs:{},tradColl:{},chainColl:{}},
+  '9-10': {tradNs:{},chainNs:{},tradColl:{},chainColl:{}},
+  '11-12':{tradNs:{},chainNs:{},tradColl:{},chainColl:{}},
+};
+
+const MONTHLY = {
+  trad:{
+    '謝明祥': {m25:[101266,142893,155837,219863,256938,315107,272658,269871,183895,191843,150368,122627],m26:[158668,103644,259372,283988,149767]},
+    '連國廷': {m25:[122277,129829,141489,163876,255974,252954,193804,173801,169792,111918,115165,96815], m26:[138641,80487,162000,216980,76678]},
+    '洪裕銘': {m25:[94150,162620,140392,260312,378749,393232,355636,232028,301592,189918,185208,141727], m26:[155739,116590,231883,275731,210122]},
+    '桃竹缺區':{m25:[131473,169739,169836,287536,412519,414949,293048,270469,227426,182860,152318,176313],m26:[135146,64019,462446,367661,164515]},
+    '徐瑞廷': {m25:[135218,144758,178799,253206,329814,300886,274657,236533,257249,214558,142371,109245], m26:[171422,97737,259712,277806,108432]},
+    '何星諺': {m25:[121968,117201,194385,235935,229976,242137,202918,181675,226596,151060,158763,104788], m26:[174271,64157,305515,223468,120267]},
+    '許峯閔': {m25:[156887,116249,100340,226054,273814,229846,219800,202546,160459,198250,128668,91164],  m26:[116505,69762,212577,180175,100358]},
+    '陳其宏': {m25:[176333,106645,137714,242675,207580,162994,146357,211156,181729,194680,131754,119914], m26:[129922,115842,185954,189313,135303]},
+    '南區缺區':{m25:[140958,129815,139915,240994,261411,212582,205481,213715,143968,224076,153857,113118],m26:[159328,71348,255261,177526,68973]},
+  },
+  chain:{
+    '謝明祥': {m25:[82513,50862,149376,167409,210979,221806,214775,212186,120220,143778,123933,70082],           m26:[187693,65248,197622,288843,130994]},
+    '連國廷': {m25:[1292143,736520,968890,1207929,1876227,2752343,665884,1772440,1160574,1154248,1061548,1289848],m26:[1694208,343666,1326128,2142800,627552]},
+    '洪裕銘': {m25:[17012,38358,12610,73626,33465,85073,58221,51392,38516,38992,60023,48569],                    m26:[447321,512833,962054,99519,44068]},
+    '桃竹缺區':{m25:[203106,124920,138966,316597,235545,443174,204293,362679,232431,224039,129672,176716],        m26:[161012,135236,358866,476634,97618]},
+    '徐瑞廷': {m25:[300368,303880,278645,256886,652458,464963,410459,371645,553407,229355,379883,290498],         m26:[425389,91957,486400,513224,417382]},
+    '何星諺': {m25:[7860,168905,355752,4275,36200,276350,43085,83545,264586,1100,11175,15334],                   m26:[38260,13927,404390,58992,50004]},
+    '許峯閔': {m25:[45718,89910,73689,149440,211910,38605,168139,25995,185110,73738,67305,174551],               m26:[177910,135100,17235,21224,58700]},
+    '陳其宏': {m25:[147728,61372,536618,182952,370714,602308,319142,164136,80672,490650,54747,90233],            m26:[444296,27571,516848,165136,506726]},
+    '南區缺區':{m25:[116071,136182,132841,142435,236251,185541,153164,236415,97463,99033,123182,128611],          m26:[179716,93243,188916,136700,36631]},
+  },
+};
+
+// ══════════════════════════════════════════════════════
+// Manual override (localStorage)
+// ══════════════════════════════════════════════════════
+const lsKey = () => `rafa_v2_${curP}`;
+function loadManual() { try { return JSON.parse(localStorage.getItem(lsKey())||'{}'); } catch { return {}; } }
+function saveManual(k,v) { const d=loadManual(); d[k]=v; localStorage.setItem(lsKey(),JSON.stringify(d)); }
+
+// ══════════════════════════════════════════════════════
+// Helpers
+// ══════════════════════════════════════════════════════
+const fN = n => (n===null||n===undefined||n===''||isNaN(Number(n)))? '—' : Math.round(Number(n)).toLocaleString('zh-TW');
+const aSum = (arr,n) => arr.slice(0,n).reduce((a,b)=>a+b,0);
+const rKey = r => r.miss ? r.region+'缺區' : r.name;
+
+function badgeCls(a,t){ if(!t||a===''||a===null) return 'b-na'; const r=Number(a)/t; return r>=0.4?'b-good':r>=0.2?'b-mid':'b-bad'; }
+function badgeTxt(a,t){ if(!t||a===''||a===null) return '—'; return (Number(a)/t*100).toFixed(1)+'%'; }
+function progColor(a,t){ if(!t||a===''||a===null) return '#ddd'; const r=Number(a)/t; return r>=0.4?'#1a7a42':r>=0.2?'#f0a000':'#c0152a'; }
+function progW(a,t){ if(!t||a===''||a===null) return 0; return Math.min(100,Number(a)/t*100); }
+
+// ══════════════════════════════════════════════════════
+// Render cards
+// ══════════════════════════════════════════════════════
+function renderCards(cid, metricKey, channel) {
+  // channel: 'trad'|'chain'|null (null = coll, no YTD monthly)
+  const N = PERIOD_META[curP].ytdN;
+  let html='', lastR='', totTgt=0, totAct=0, totY26=0, totY25=0;
+
+  ROSTER.forEach(rep => {
+    const k = rKey(rep);
+    const actual = getActual(rep, metricKey);
+    const target = rep.miss ? null : getTarget(rep.name, metricKey);
+    const md = channel ? getMonthly(k, channel) : null;
+    const y26 = md ? aSum(md.m26, N) : null;
+    const y25 = md ? aSum(md.m25, N) : null;
+
+    if (rep.region !== lastR) {
+      html += `<div class="rgn-hdr">${rep.region}</div>`;
+      lastR = rep.region;
+    }
+
+    const bCls=badgeCls(actual,target), bTxt=badgeTxt(actual,target);
+    const pw=progW(actual,target), pc=progColor(actual,target);
+
+    const actField = rep.miss
+      ? `<div class="rep-num-val ${actual!==''&&actual!==null?'act-val':'na-val'}">${actual!==''&&actual!==null?fN(actual):'—'}</div>`
+      : `<input class="num-input" type="text" inputmode="numeric" placeholder="手動輸入"
+           value="${actual!==''&&actual!==null?Math.round(Number(actual)):''}" data-key="${metricKey}_${k}"
+           onchange="handleInput(this)" onfocus="this.select()">`;
+
+    let ytdHtml='';
+    if (channel && !rep.miss) {
+      const yoyTxt = (!y26||!y25)?'—':((y26-y25)/y25>=0?'+':'')+((y26-y25)/y25*100).toFixed(1)+'%';
+      const yoyCls = (!y26||!y25)?'yf':((y26-y25)/y25>0.02?'yu':(y26-y25)/y25<-0.02?'yd':'yf');
+      ytdHtml=`
+        <div class="ytd-toggle" onclick="toggleYtd(this)">
+          <span>年度累計（1–${N}月）</span><span class="arr">▼</span>
+        </div>
+        <div class="ytd-body">
+          <div class="ytd-nums">
+            <div><div class="ytd-num-lbl">2026</div><div class="ytd-num-val ytd-26">${y26!==null?fN(y26):'—'}</div></div>
+            <div><div class="ytd-num-lbl">2025</div><div class="ytd-num-val ytd-25">${y25!==null?fN(y25):'—'}</div></div>
+            <div><div class="ytd-num-lbl">YoY</div><div class="ytd-num-val yoy ${yoyCls}">${yoyTxt}</div></div>
+          </div>
+        </div>`;
+    }
+
+    html+=`
+    <div class="rep-card${rep.miss?' miss':''}">
+      <div class="rep-top">
+        <div class="rep-name">${rep.name}</div>
+        <div class="rep-badge ${bCls}">${bTxt}</div>
+      </div>
+      <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill" style="width:${pw}%;background:${pc}"></div></div></div>
+      <div class="rep-nums">
+        <div><div class="rep-num-lbl">目標</div><div class="rep-num-val">${target?fN(target):'—'}</div></div>
+        <div><div class="rep-num-lbl">累計</div>${actField}</div>
+      </div>
+      ${ytdHtml}
+    </div>`;
+
+    if(target){ totTgt+=target; }
+    if(actual!==''&&actual!==null&&!isNaN(Number(actual))){ totAct+=Number(actual); }
+    if(y26) totY26+=y26;
+    if(y25) totY25+=y25;
+  });
+
+  // Total row
+  const tbCls=badgeCls(totAct,totTgt), tbTxt=badgeTxt(totAct,totTgt);
+  const tpw=progW(totAct,totTgt), tpc=progColor(totAct,totTgt);
+  let totYtd='';
+  if(channel){
+    const yoyTxt=(!totY26||!totY25)?'—':((totY26-totY25)/totY25>=0?'+':'')+((totY26-totY25)/totY25*100).toFixed(1)+'%';
+    const yoyCls=(!totY26||!totY25)?'yf':((totY26-totY25)/totY25>0.02?'yu':(totY26-totY25)/totY25<-0.02?'yd':'yf');
+    totYtd=`
+      <div style="margin-top:10px;padding-top:9px;border-top:1px dashed var(--border)">
+        <div class="ytd-nums">
+          <div><div class="ytd-num-lbl">2026累計</div><div class="ytd-num-val ytd-26">${fN(totY26)}</div></div>
+          <div><div class="ytd-num-lbl">2025同期</div><div class="ytd-num-val ytd-25">${fN(totY25)}</div></div>
+          <div><div class="ytd-num-lbl">YoY</div><div class="ytd-num-val yoy ${yoyCls}">${yoyTxt}</div></div>
+        </div>
+      </div>`;
+  }
+  html+=`
+  <div class="tot-card">
+    <div class="rep-top">
+      <div class="rep-name">合 計</div>
+      <div class="rep-badge ${tbCls}">${tbTxt}</div>
+    </div>
+    <div class="prog-wrap"><div class="prog-bg"><div class="prog-fill" style="width:${tpw}%;background:${tpc}"></div></div></div>
+    <div class="rep-nums">
+      <div><div class="rep-num-lbl">總目標</div><div class="rep-num-val">${fN(totTgt)}</div></div>
+      <div><div class="rep-num-lbl">總累計</div><div class="rep-num-val act-val">${fN(totAct)}</div></div>
+    </div>
+    ${totYtd}
+  </div>`;
+
+  const leg=document.getElementById('leg-'+cid.replace('cards-',''));
+  if(leg) leg.innerHTML=`
+    <div class="leg-i"><div class="leg-d" style="background:var(--green)"></div>達成率 ≥ 40%</div>
+    <div class="leg-i"><div class="leg-d" style="background:#f0a000"></div>20–39%</div>
+    <div class="leg-i"><div class="leg-d" style="background:var(--red)"></div>&lt; 20%</div>
+    <div style="width:100%;font-size:10px;color:var(--faint);margin-top:2px">缺區不計目標</div>`;
+
+  document.getElementById(cid).innerHTML=html;
+  return {tgt:totTgt,act:totAct,rate:totTgt>0&&totAct>0?totAct/totTgt:null};
+}
+
+function toggleYtd(el){ el.classList.toggle('open'); el.nextElementSibling.classList.toggle('open'); }
+
+function updateCard(vid,sid,rate,tgt,act){
+  const el=document.getElementById(vid),sub=document.getElementById(sid);
+  if(rate===null){el.innerHTML='<span class="sum-na">待輸入</span>';sub.textContent='';return;}
+  const pct=(rate*100).toFixed(1);
+  const col=rate>=0.4?'var(--green)':rate>=0.2?'var(--amber)':'var(--red)';
+  el.innerHTML=`<span style="color:${col}">${pct}<span class="u">%</span></span>`;
+  sub.textContent=`目標 ${fN(tgt)} 累計 ${fN(act)}`;
+}
+
+function renderAll(){
+  const r0=renderCards('cards-trad-ns',  'tradNs',  'trad');
+  const r1=renderCards('cards-chain-ns', 'chainNs', 'chain');
+  const r2=renderCards('cards-trad-coll','tradColl', null);
+  const r3=renderCards('cards-chain-coll','chainColl',null);
+  updateCard('c0','c0s',r0.rate,r0.tgt,r0.act);
+  updateCard('c1','c1s',r1.rate,r1.tgt,r1.act);
+  updateCard('c2','c2s',r2.rate,r2.tgt,r2.act);
+  updateCard('c3','c3s',r3.rate,r3.tgt,r3.act);
+}
+
+function handleInput(el){
+  const raw=el.value.replace(/,/g,'').trim();
+  const num=parseFloat(raw);
+  if(raw===''||isNaN(num)){el.value='';saveManual(el.dataset.key,'');}
+  else{el.value=Math.round(num);saveManual(el.dataset.key,Math.round(num));}
+  renderAll();
+}
+
+function switchChannel(ch,btn){
+  curChannel=ch;
+  document.querySelectorAll('.ch-tab').forEach(b=>b.classList.remove('on')); btn.classList.add('on');
+  document.getElementById('ch-trad').style.display  = ch==='trad' ?'':'none';
+  document.getElementById('ch-chain').style.display = ch==='chain'?'':'none';
+  updateCardHighlight();
+}
+function switchSub(ch,sub,btn){
+  curSub[ch]=sub;
+  document.querySelectorAll(`#ch-${ch} .sub-tab`).forEach(b=>b.classList.remove('on')); btn.classList.add('on');
+  document.querySelectorAll(`#ch-${ch} .pane`).forEach(p=>p.classList.remove('on'));
+  document.getElementById(`p-${ch}-${sub}`).classList.add('on');
+  updateCardHighlight();
+}
+function jumpTo(ch,sub){
+  switchChannel(ch,document.getElementById(`l1-${ch}`));
+  switchSub(ch,sub,document.getElementById(`l2-${ch}-${sub}`));
+  document.querySelector('.ch-tabs').scrollIntoView({behavior:'smooth',block:'start'});
+}
+function updateCardHighlight(){
+  const map={'trad-ns':'card-trad-ns','trad-coll':'card-trad-coll','chain-ns':'card-chain-ns','chain-coll':'card-chain-coll'};
+  const active=`${curChannel}-${curSub[curChannel]}`;
+  Object.values(map).forEach(id=>document.getElementById(id).classList.remove('active-card'));
+  document.getElementById(map[active])?.classList.add('active-card');
+}
+function setPeriod(btn,p){
+  curP=p;
+  document.querySelectorAll('.pbtn').forEach(b=>b.classList.remove('on')); btn.classList.add('on');
+  renderAll();
+}
+function clearAll(e){
+  e.preventDefault();
+  if(!confirm(`確定清除「${PERIOD_META[curP].label}」手動輸入數據？`)) return;
+  localStorage.removeItem(lsKey());
+  renderAll();
+}
+
+// ── INIT ──
+document.getElementById('rptDate').value = new Date().toISOString().slice(0,10);
+loadData();
+</script>
+</body>
+</html>
