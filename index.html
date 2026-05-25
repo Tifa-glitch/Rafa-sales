@@ -2,322 +2,353 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>拉法業務淨銷週報 — 管理層</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>拉法業務週報 — 管理層</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;600;700&display=swap');
 
   :root {
     --red: #c0152a;
-    --red-dark: #8b0f1e;
-    --red-muted: rgba(192,21,42,0.06);
-    --red-border: rgba(192,21,42,0.18);
-    --bg: #f0f0f0;
-    --surface: #fff;
-    --border: #e0e0e0;
-    --text: #1a1a1a;
-    --sub: #666;
+    --red-light: rgba(192,21,42,0.08);
+    --red-border: rgba(192,21,42,0.2);
+    --bg: #f2f2f2;
+    --card: #fff;
+    --border: #e4e4e4;
+    --text: #111;
+    --sub: #555;
     --faint: #aaa;
     --green: #1a7a42;
-    --green-bg: #edf8f2;
+    --green-bg: #e8f7ef;
     --amber: #a85400;
-    --amber-bg: #fff5e8;
-    --bad-bg: #fff4f5;
+    --amber-bg: #fff3e0;
+    --bad-bg: #fff3f4;
     --blue: #1e4fbb;
     --blue-bg: #eef2ff;
-    --blue-light: #f0f4ff;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Noto Sans TC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    max-width: 480px;
+    margin: 0 auto;
+  }
 
   /* ── HEADER ── */
   .hdr {
-    background: var(--red); color: #fff;
-    padding: 18px 32px 16px;
-    display: flex; align-items: flex-end; justify-content: space-between;
+    background: var(--red);
+    color: #fff;
+    padding: 16px 18px 14px;
   }
-  .hdr-l .co { font-size: 10px; letter-spacing: 3px; opacity: .6; text-transform: uppercase; }
-  .hdr-l h1  { font-size: 19px; font-weight: 900; margin-top: 2px; }
-  .hdr-r { display: flex; align-items: flex-end; gap: 16px; }
-  .hdr-r .lbl { font-size: 10px; opacity: .55; letter-spacing: 1.5px; margin-bottom: 3px; }
-  .hdr-r input[type=date] {
-    background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22);
-    color: #fff; font-family: 'IBM Plex Mono', monospace; font-size: 12px;
-    padding: 4px 9px; border-radius: 4px; width: 155px;
+  .hdr-top {
+    display: flex; align-items: flex-start; justify-content: space-between;
   }
-  .hdr-r input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .6; }
-  .print-btn {
-    padding: 6px 16px; background: rgba(255,255,255,.15); color: #fff;
-    border: 1px solid rgba(255,255,255,.3); border-radius: 4px;
-    font-size: 11.5px; font-family: 'Noto Sans TC', sans-serif;
-    cursor: pointer; font-weight: 600; white-space: nowrap;
-  }
-  .print-btn:hover { background: rgba(255,255,255,.25); }
-
-  /* ── PERIOD BAR ── */
-  .pbar {
-    background: #fff; border-bottom: 1px solid var(--border);
-    padding: 10px 32px; display: flex; align-items: center; gap: 8px;
-  }
-  .pbar-lbl { font-size: 11px; color: var(--sub); font-weight: 600; margin-right: 2px; }
-  .pbtn {
-    padding: 4px 13px; border: 1.5px solid var(--border); background: #fff;
-    border-radius: 20px; font-size: 11.5px; font-family: 'Noto Sans TC', sans-serif;
-    cursor: pointer; color: var(--sub); transition: all .15s; font-weight: 500;
-  }
-  .pbtn:hover { border-color: var(--red); color: var(--red); }
-  .pbtn.on { background: var(--red); border-color: var(--red); color: #fff; }
-  .savebar {
-    margin-left: auto; font-size: 10px; color: var(--faint);
+  .hdr-co { font-size: 10px; letter-spacing: 2.5px; opacity: .55; text-transform: uppercase; margin-bottom: 3px; }
+  .hdr-title { font-size: 18px; font-weight: 900; letter-spacing: .3px; }
+  .hdr-date {
     font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px; background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.25);
+    color: #fff; padding: 4px 8px; border-radius: 5px;
+    text-align: center; margin-top: 2px;
   }
-  .savebar span { color: var(--red); font-weight: 600; }
-  .savebar a { color: var(--faint); }
+  .hdr-date input[type=date] {
+    background: transparent; border: none; color: #fff;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    padding: 0; width: 110px;
+  }
+  .hdr-date input[type=date]::-webkit-calendar-picker-indicator { filter: invert(1); opacity: .6; width: 13px; }
+
+  /* ── PERIOD PILLS ── */
+  .pbar {
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 14px;
+    display: flex; gap: 7px; align-items: center; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .pbar::-webkit-scrollbar { display: none; }
+  .pbar-lbl { font-size: 11px; color: var(--sub); font-weight: 700; white-space: nowrap; margin-right: 2px; }
+  .pbtn {
+    padding: 6px 15px; border: 1.5px solid var(--border);
+    background: #fff; border-radius: 20px;
+    font-size: 13px; font-family: 'Noto Sans TC', sans-serif;
+    cursor: pointer; color: var(--sub); font-weight: 600;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .pbtn.on { background: var(--red); border-color: var(--red); color: #fff; }
 
   /* ── MAIN ── */
-  .main { padding: 20px 32px 40px; max-width: 1440px; margin: 0 auto; }
+  .main { padding: 14px 14px 40px; }
 
   /* ── SUMMARY CARDS ── */
-  .cards { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 24px; }
-  .card {
-    background: #fff; border: 1px solid var(--border); border-radius: 8px;
-    padding: 15px 17px; position: relative; overflow: hidden; cursor: pointer;
-    transition: box-shadow .15s, border-color .15s;
+  .sum-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 18px;
   }
-  .card:hover { box-shadow: 0 2px 12px rgba(0,0,0,.08); border-color: #ccc; }
-  .card.active-card { border-color: var(--red); box-shadow: 0 0 0 2px var(--red-border); }
-  .card::before { content:''; position:absolute; top:0;left:0;right:0; height:3px; background: var(--red); }
-  .card-lbl { font-size: 10px; letter-spacing: 1.2px; color: var(--faint); font-weight: 700; text-transform: uppercase; margin-bottom: 7px; }
-  .card-val { font-family: 'IBM Plex Mono', monospace; font-size: 26px; font-weight: 700; line-height: 1; }
-  .card-val .u { font-size: 14px; font-weight: 400; color: var(--sub); }
-  .card-sub { font-size: 10px; color: var(--faint); margin-top: 4px; font-family: 'IBM Plex Mono', monospace; }
-  .card-na { font-size: 13px; color: var(--faint); font-style: italic; }
+  .sum-card {
+    background: var(--card); border-radius: 12px;
+    border: 1px solid var(--border);
+    padding: 13px 14px; position: relative; overflow: hidden;
+    cursor: pointer; transition: border-color .15s;
+  }
+  .sum-card::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    background: var(--red);
+  }
+  .sum-card.active-card { border-color: var(--red); box-shadow: 0 0 0 2px var(--red-border); }
+  .sum-lbl { font-size: 10px; letter-spacing: 1px; color: var(--faint); font-weight: 700; text-transform: uppercase; margin-bottom: 6px; }
+  .sum-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 28px; font-weight: 700; line-height: 1;
+  }
+  .sum-val .u { font-size: 14px; font-weight: 400; color: var(--sub); }
+  .sum-sub { font-size: 10.5px; color: var(--faint); margin-top: 5px; font-family: 'IBM Plex Mono', monospace; }
+  .sum-na { font-size: 13px; color: var(--faint); font-style: italic; }
 
-  /* ── TAB CONTAINER ── */
-  .tab-shell {
-    background: #fff; border: 1px solid var(--border); border-radius: 10px;
-    overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.05);
+  /* ── CHANNEL TABS ── */
+  .ch-tabs {
+    display: flex; background: #fff;
+    border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; margin-bottom: 12px;
+  }
+  .ch-tab {
+    flex: 1; padding: 11px 8px; text-align: center;
+    font-size: 14px; font-weight: 700; color: var(--sub);
+    cursor: pointer; border-bottom: 3px solid transparent;
+    transition: all .15s;
+  }
+  .ch-tab.on { color: var(--red); border-bottom-color: var(--red); background: #fff9f9; }
+
+  /* ── SUB TABS ── */
+  .sub-tabs {
+    display: flex; gap: 7px; margin-bottom: 13px;
+  }
+  .sub-tab {
+    flex: 1; padding: 9px 8px; text-align: center;
+    font-size: 13px; font-weight: 700; color: var(--sub);
+    background: #fff; border: 1.5px solid var(--border);
+    border-radius: 8px; cursor: pointer;
+  }
+  .sub-tab.on { color: var(--red); border-color: var(--red); background: #fff9f9; }
+
+  /* ── REGION HEADER ── */
+  .rgn-hdr {
+    font-size: 11px; font-weight: 800; letter-spacing: 2.5px;
+    color: var(--red); text-transform: uppercase;
+    padding: 7px 4px 5px;
   }
 
-  /* Channel tabs (L1) */
-  .l1-tabs {
-    display: flex; background: #f7f7f7; border-bottom: 1px solid var(--border);
+  /* ── REP CARD ── */
+  .rep-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 9px;
+    transition: border-color .15s;
   }
-  .l1-tab {
-    padding: 14px 28px; font-size: 13px; font-weight: 700; cursor: pointer;
-    color: var(--sub); border-bottom: 3px solid transparent;
-    transition: all .15s; letter-spacing: .5px; display: flex; align-items: center; gap: 7px;
+  .rep-card.miss { opacity: .55; }
+  .rep-card:not(.miss):hover { border-color: #ccc; }
+
+  .rep-top {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 11px;
   }
-  .l1-tab:hover { color: var(--red); }
-  .l1-tab.on { color: var(--red); border-bottom-color: var(--red); background: #fff; }
-  .l1-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
-
-  /* Sub-tabs (L2) */
-  .l2-wrap { padding: 14px 20px 0; border-bottom: 1px solid var(--border); background: #fff; display: flex; gap: 6px; }
-  .l2-tab {
-    padding: 6px 18px; font-size: 12px; font-weight: 600; cursor: pointer;
-    color: var(--sub); border: 1.5px solid var(--border); border-radius: 6px 6px 0 0;
-    border-bottom: none; background: #f7f7f7; transition: all .15s;
-    margin-bottom: -1px; position: relative;
-  }
-  .l2-tab:hover { color: var(--text); background: #eee; }
-  .l2-tab.on {
-    color: var(--red); background: #fff; border-color: var(--border);
-    border-bottom: 2px solid #fff; font-weight: 700;
-  }
-
-  /* Content pane */
-  .pane { display: none; padding: 20px 20px 24px; }
-  .pane.on { display: block; }
-
-  /* ── TABLE ── */
-  table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
-
-  .ch th {
-    padding: 9px 12px; text-align: left; font-weight: 700;
-    font-size: 10.5px; color: var(--sub);
-    background: #f6f6f6; border-bottom: 2px solid var(--border); white-space: nowrap;
-  }
-  .ch th.r { text-align: right; }
-  .ch th.c { text-align: center; }
-
-  tbody tr { border-bottom: 1px solid var(--border); transition: background .1s; }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: var(--red-muted); }
-
-  .rgn td {
-    background: #f9f0f1; color: var(--red);
-    padding: 5px 12px; font-size: 10px; font-weight: 800;
-    letter-spacing: 2px; text-transform: uppercase;
-    border-top: 1px solid var(--red-border); border-bottom: 1px solid var(--red-border);
-  }
-  .miss td { color: var(--faint); font-style: italic; }
-  .tot td  { background: #f5f5f5; font-weight: 700; border-top: 2px solid var(--border); }
-
-  td { padding: 10px 12px; vertical-align: middle; }
-  td.r { text-align: right; }
-  td.c { text-align: center; }
-  .rn { font-weight: 700; }
-  .mono { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600; }
-
-  .ei {
-    font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;
-    text-align: right; border: 1px solid transparent; background: transparent;
-    width: 110px; padding: 3px 5px; border-radius: 4px; color: var(--text); transition: all .15s;
-  }
-  .ei:hover { border-color: var(--red-border); background: var(--red-muted); }
-  .ei:focus { outline: none; border-color: var(--red); background: #fff; box-shadow: 0 0 0 3px rgba(192,21,42,.08); }
-  .ei::placeholder { color: var(--faint); font-style: italic; font-weight: 400; }
-
-  .badge {
+  .rep-name { font-size: 17px; font-weight: 800; }
+  .rep-badge {
     display: inline-flex; align-items: center; justify-content: center;
-    padding: 2px 10px; border-radius: 14px;
-    font-family: 'IBM Plex Mono', monospace; font-size: 11.5px; font-weight: 700;
-    min-width: 64px; white-space: nowrap;
+    padding: 5px 14px; border-radius: 20px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 700;
   }
-  .b-na   { background: #f2f2f2; color: var(--faint); font-style:italic; font-weight:400; font-family:'Noto Sans TC',sans-serif; font-size:10px; }
+  .b-na   { background: #f2f2f2; color: var(--faint); font-style:italic; font-family:'Noto Sans TC',sans-serif; font-size:12px; padding: 5px 10px; }
   .b-good { background: var(--green-bg); color: var(--green); }
   .b-mid  { background: var(--amber-bg); color: var(--amber); }
   .b-bad  { background: var(--bad-bg);   color: var(--red); }
 
-  .yoy { font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 700; }
+  /* Progress bar */
+  .prog-wrap { margin-bottom: 12px; }
+  .prog-bg {
+    height: 8px; background: #ebebeb; border-radius: 99px; overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%; border-radius: 99px;
+    transition: width .4s cubic-bezier(.4,0,.2,1);
+  }
+
+  /* Numbers row */
+  .rep-nums {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 0;
+  }
+  .rep-num-block {}
+  .rep-num-lbl {
+    font-size: 10px; color: var(--faint); font-weight: 700;
+    letter-spacing: .8px; text-transform: uppercase; margin-bottom: 3px;
+  }
+  .rep-num-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 19px; font-weight: 700; color: var(--text);
+  }
+  .rep-num-val.act-val { color: var(--red); }
+  .rep-num-val.na-val { color: var(--faint); font-size: 15px; font-style: italic; font-family: 'Noto Sans TC', sans-serif; }
+
+  /* Input for editable fields */
+  .num-input {
+    font-family: 'IBM Plex Mono', monospace; font-size: 19px; font-weight: 700;
+    color: var(--red); background: transparent; border: none;
+    border-bottom: 2px dashed var(--red-border); width: 100%;
+    padding: 0 0 2px; outline: none;
+    -webkit-appearance: none;
+  }
+  .num-input::placeholder { color: var(--faint); font-style: italic; font-weight: 400; font-size: 14px; }
+  .num-input:focus { border-bottom-color: var(--red); }
+
+  /* YTD section (collapsible) */
+  .ytd-toggle {
+    margin-top: 10px; padding-top: 9px;
+    border-top: 1px dashed var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer; font-size: 11px; color: var(--faint); font-weight: 600;
+    letter-spacing: .5px;
+  }
+  .ytd-toggle .arr { transition: transform .2s; font-size: 10px; }
+  .ytd-toggle.open .arr { transform: rotate(180deg); }
+  .ytd-body {
+    display: none; padding-top: 10px;
+  }
+  .ytd-body.open { display: block; }
+  .ytd-nums {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .ytd-num-lbl { font-size: 10px; color: var(--faint); font-weight: 700; letter-spacing: .5px; margin-bottom: 3px; }
+  .ytd-num-val {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px; font-weight: 700;
+  }
+  .ytd-26 { color: var(--blue); }
+  .ytd-25 { color: #999; }
+  .yoy { font-size: 15px; font-weight: 700; }
   .yu { color: var(--green); }
   .yd { color: var(--red); }
   .yf { color: var(--faint); }
 
-  .n26 { font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:var(--blue); }
-  .n25 { font-family:'IBM Plex Mono',monospace; font-size:12px; font-weight:600; color:#999; }
+  /* ── TOTAL CARD ── */
+  .tot-card {
+    background: #f5f5f5; border: 2px solid var(--border);
+    border-radius: 12px; padding: 14px 16px; margin-top: 4px;
+  }
+  .tot-card .rep-name { color: var(--sub); font-size: 14px; letter-spacing: 1px; }
 
   /* ── LEGEND ── */
   .legend {
-    display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
-    margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border);
-    font-size: 10.5px; color: var(--sub);
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-top: 16px; padding: 10px 4px 0;
+    border-top: 1px solid var(--border);
+    font-size: 11px; color: var(--sub);
   }
-  .leg-i { display: flex; align-items: center; gap: 4px; }
-  .leg-d { width: 7px; height: 7px; border-radius: 50%; }
-  .leg-note { margin-left: auto; font-size: 10px; color: var(--faint); }
+  .leg-i { display: flex; align-items: center; gap: 5px; }
+  .leg-d { width: 8px; height: 8px; border-radius: 50%; }
 
-  @media print {
-    body { background: #fff; }
-    .pbar, .print-btn { display: none; }
-    .hdr { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    .tab-shell { border: none; box-shadow: none; }
-    .l1-tabs { display: none; }
-    .l2-wrap { display: none; }
-    .pane { display: block !important; }
-    .rgn td, .badge, .gh th { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
-    .ei { border: none; background: transparent; }
+  /* ── SAVE BAR ── */
+  .savebar {
+    text-align: center; font-size: 11px; color: var(--faint);
+    font-family: 'IBM Plex Mono', monospace;
+    padding: 8px 14px 4px;
   }
+  .savebar span { color: var(--red); }
+  .savebar a { color: var(--faint); }
 </style>
 </head>
 <body>
 
 <!-- HEADER -->
 <div class="hdr">
-  <div class="hdr-l">
-    <div class="co">拉法 Rafa ・ 管理層報告</div>
-    <h1>業務淨銷週報追蹤</h1>
-  </div>
-  <div class="hdr-r">
+  <div class="hdr-top">
     <div>
-      <div class="lbl">更新日期</div>
+      <div class="hdr-co">拉法 Rafa · 管理層報告</div>
+      <div class="hdr-title">業務淨銷週報</div>
+    </div>
+    <div class="hdr-date">
       <input type="date" id="rptDate">
     </div>
-    <button class="print-btn" onclick="window.print()">列印 / PDF</button>
   </div>
 </div>
 
-<!-- PERIOD + SAVE BAR -->
+<!-- SAVE BAR -->
+<div class="savebar">
+  最後儲存：<span id="savedTime">尚未儲存</span>
+  &nbsp;｜&nbsp;<a href="#" onclick="clearAll(event)">清除</a>
+</div>
+
+<!-- PERIOD PILLS -->
 <div class="pbar">
-  <span class="pbar-lbl">週期：</span>
+  <span class="pbar-lbl">週期</span>
   <button class="pbtn on"  onclick="setPeriod(this,'5-6')">5–6月</button>
   <button class="pbtn"     onclick="setPeriod(this,'7-8')">7–8月</button>
   <button class="pbtn"     onclick="setPeriod(this,'9-10')">9–10月</button>
   <button class="pbtn"     onclick="setPeriod(this,'11-12')">11–12月</button>
-  <div class="savebar">
-    最後儲存：<span id="savedTime">尚未儲存</span>
-    &nbsp;｜&nbsp;<a href="#" onclick="clearAll(event)">清除數據</a>
-  </div>
 </div>
 
 <!-- MAIN -->
 <div class="main">
 
-  <!-- Summary Cards (clickable → jump to tab) -->
-  <div class="cards">
-    <div class="card active-card" id="card-trad-ns" onclick="jumpTo('trad','ns')">
-      <div class="card-lbl">傳統淨銷 週期達成率</div>
-      <div class="card-val" id="c0"><span class="card-na">—</span></div>
-      <div class="card-sub" id="c0s"></div>
+  <!-- Summary Cards -->
+  <div class="sum-grid">
+    <div class="sum-card active-card" id="card-trad-ns" onclick="jumpTo('trad','ns')">
+      <div class="sum-lbl">傳統淨銷</div>
+      <div class="sum-val" id="c0"><span class="sum-na">—</span></div>
+      <div class="sum-sub" id="c0s"></div>
     </div>
-    <div class="card" id="card-chain-ns" onclick="jumpTo('chain','ns')">
-      <div class="card-lbl">連鎖淨銷 週期達成率</div>
-      <div class="card-val" id="c1"><span class="card-na">—</span></div>
-      <div class="card-sub" id="c1s"></div>
+    <div class="sum-card" id="card-chain-ns" onclick="jumpTo('chain','ns')">
+      <div class="sum-lbl">連鎖淨銷</div>
+      <div class="sum-val" id="c1"><span class="sum-na">—</span></div>
+      <div class="sum-sub" id="c1s"></div>
     </div>
-    <div class="card" id="card-trad-coll" onclick="jumpTo('trad','coll')">
-      <div class="card-lbl">傳統收款 週期達成率</div>
-      <div class="card-val" id="c2"><span class="card-na">待輸入</span></div>
-      <div class="card-sub" id="c2s"></div>
+    <div class="sum-card" id="card-trad-coll" onclick="jumpTo('trad','coll')">
+      <div class="sum-lbl">傳統收款</div>
+      <div class="sum-val" id="c2"><span class="sum-na">待輸入</span></div>
+      <div class="sum-sub" id="c2s"></div>
     </div>
-    <div class="card" id="card-chain-coll" onclick="jumpTo('chain','coll')">
-      <div class="card-lbl">連鎖收款 週期達成率</div>
-      <div class="card-val" id="c3"><span class="card-na">待輸入</span></div>
-      <div class="card-sub" id="c3s"></div>
+    <div class="sum-card" id="card-chain-coll" onclick="jumpTo('chain','coll')">
+      <div class="sum-lbl">連鎖收款</div>
+      <div class="sum-val" id="c3"><span class="sum-na">待輸入</span></div>
+      <div class="sum-sub" id="c3s"></div>
     </div>
   </div>
 
-  <!-- Tab Shell -->
-  <div class="tab-shell">
+  <!-- Channel Tabs -->
+  <div class="ch-tabs">
+    <div class="ch-tab on" id="l1-trad" onclick="switchChannel('trad',this)">傳統通路</div>
+    <div class="ch-tab"    id="l1-chain" onclick="switchChannel('chain',this)">連鎖通路</div>
+  </div>
 
-    <!-- L1: Channel Tabs -->
-    <div class="l1-tabs">
-      <div class="l1-tab on" id="l1-trad" onclick="switchChannel('trad',this)">
-        <span class="l1-dot"></span>傳統通路
-      </div>
-      <div class="l1-tab" id="l1-chain" onclick="switchChannel('chain',this)">
-        <span class="l1-dot"></span>連鎖通路
-      </div>
+  <!-- TRAD -->
+  <div id="ch-trad">
+    <div class="sub-tabs">
+      <div class="sub-tab on" id="l2-trad-ns"   onclick="switchSub('trad','ns',this)">淨銷</div>
+      <div class="sub-tab"    id="l2-trad-coll"  onclick="switchSub('trad','coll',this)">收款</div>
     </div>
+    <div class="pane on" id="p-trad-ns"><div id="cards-trad-ns"></div><div class="legend" id="leg-trad-ns"></div></div>
+    <div class="pane"    id="p-trad-coll"><div id="cards-trad-coll"></div><div class="legend" id="leg-trad-coll"></div></div>
+  </div>
 
-    <!-- TRAD pane -->
-    <div id="ch-trad">
-      <div class="l2-wrap">
-        <div class="l2-tab on" id="l2-trad-ns"   onclick="switchSub('trad','ns',this)">淨銷</div>
-        <div class="l2-tab"    id="l2-trad-coll"  onclick="switchSub('trad','coll',this)">收款</div>
-      </div>
-      <div class="pane on" id="p-trad-ns">
-        <table id="t-trad-ns"></table>
-        <div class="legend" id="leg-trad-ns"></div>
-      </div>
-      <div class="pane" id="p-trad-coll">
-        <table id="t-trad-coll"></table>
-        <div class="legend" id="leg-trad-coll"></div>
-      </div>
+  <!-- CHAIN -->
+  <div id="ch-chain" style="display:none">
+    <div class="sub-tabs">
+      <div class="sub-tab on" id="l2-chain-ns"   onclick="switchSub('chain','ns',this)">淨銷</div>
+      <div class="sub-tab"    id="l2-chain-coll"  onclick="switchSub('chain','coll',this)">收款</div>
     </div>
+    <div class="pane on" id="p-chain-ns"><div id="cards-chain-ns"></div><div class="legend" id="leg-chain-ns"></div></div>
+    <div class="pane"    id="p-chain-coll"><div id="cards-chain-coll"></div><div class="legend" id="leg-chain-coll"></div></div>
+  </div>
 
-    <!-- CHAIN pane -->
-    <div id="ch-chain" style="display:none">
-      <div class="l2-wrap">
-        <div class="l2-tab on" id="l2-chain-ns"   onclick="switchSub('chain','ns',this)">淨銷</div>
-        <div class="l2-tab"    id="l2-chain-coll"  onclick="switchSub('chain','coll',this)">收款</div>
-      </div>
-      <div class="pane on" id="p-chain-ns">
-        <table id="t-chain-ns"></table>
-        <div class="legend" id="leg-chain-ns"></div>
-      </div>
-      <div class="pane" id="p-chain-coll">
-        <table id="t-chain-coll"></table>
-        <div class="legend" id="leg-chain-coll"></div>
-      </div>
-    </div>
-
-  </div><!-- /tab-shell -->
 </div><!-- /main -->
 
 <script>
-// ── MONTHLY DATA ──────────────────────────────────────
+// ── DATA ──────────────────────────────────────────────
 const MONTHLY = {
   trad: {
     '謝明祥':  { m25:[101266,142893,155837,219863,256938,315107,272658,269871,183895,191843,150368,122627], m26:[158668,103644,259372,283988,149767] },
@@ -343,7 +374,6 @@ const MONTHLY = {
   },
 };
 
-// ── PERIODS ───────────────────────────────────────────
 const PERIODS = {
   '5-6':   { label:'5–6月', ytdN:5,
     tradNs:   { targets:{'謝明祥':558888,'連國廷':552394,'洪裕銘':754225,'徐瑞廷':616194,'何星諺':552394,'許峯閔':552394,'陳其宏':552394} },
@@ -363,7 +393,6 @@ const SEEDS = {
   chainColl:{},
 };
 
-// monthly type mapping
 const NS_TYPE = { tradNs:'trad', chainNs:'chain', tradColl:null, chainColl:null };
 
 const ROSTER = [
@@ -376,7 +405,8 @@ const ROSTER = [
 
 // ── STATE ─────────────────────────────────────────────
 let curP = '5-6';
-const sKey = () => `rafa_v4_${curP}`;
+let curChannel='trad', curSub={trad:'ns', chain:'ns'};
+const sKey = () => `rafa_mobile_v1_${curP}`;
 function loadS() { try { return JSON.parse(localStorage.getItem(sKey())||'{}'); } catch { return {}; } }
 function saveV(k,v) { const d=loadS(); d[k]=v; localStorage.setItem(sKey(),JSON.stringify(d)); stamp(); }
 function stamp() {
@@ -389,130 +419,196 @@ const fN = n => (n===null||n===undefined||n===''||isNaN(Number(n))) ? '—' : Ma
 const aSum = (arr,n) => arr.slice(0,n).reduce((a,b)=>a+b,0);
 const rKey = r => r.miss ? r.region+'缺區' : r.name;
 
-function mkBadge(actual, target) {
-  if (!target || actual===null || actual==='') return `<span class="badge b-na">—</span>`;
+function badgeCls(actual, target) {
+  if (!target || actual===null || actual==='') return 'b-na';
   const r=Number(actual)/target;
-  const cls=r>=0.4?'b-good':r>=0.2?'b-mid':'b-bad';
-  return `<span class="badge ${cls}">${(r*100).toFixed(1)}%</span>`;
+  return r>=0.4?'b-good':r>=0.2?'b-mid':'b-bad';
 }
-function mkYoy(v26,v25) {
-  if(!v26||!v25) return `<span class="yoy yf">—</span>`;
-  const d=(v26-v25)/v25;
-  return `<span class="yoy ${d>0.02?'yu':d<-0.02?'yd':'yf'}">${d>=0?'+':''}${(d*100).toFixed(1)}%</span>`;
+function badgeTxt(actual, target) {
+  if (!target || actual===null || actual==='') return '—';
+  return (Number(actual)/target*100).toFixed(1)+'%';
+}
+function progColor(actual, target) {
+  if (!target || actual===null || actual==='') return '#ddd';
+  const r=Number(actual)/target;
+  return r>=0.4?'#1a7a42':r>=0.2?'#f0a000':'#c0152a';
+}
+function progW(actual, target) {
+  if (!target || actual===null || actual==='') return 0;
+  return Math.min(100, Number(actual)/target*100);
 }
 
-// ── RENDER TABLE ──────────────────────────────────────
-function renderTable(tid, type, stored) {
+// ── RENDER CARDS ──────────────────────────────────────
+function renderCards(cid, type, stored) {
   const pd = PERIODS[curP];
   const targets = pd[type]?.targets || {};
   const mtype = NS_TYPE[type];
   const hasYtd = !!mtype;
   const N = pd.ytdN;
-  const cols = hasYtd ? 8 : 5;
 
-  // Fixed column widths
-  let cg = `<colgroup>
-    <col style="width:70px">
-    <col style="width:90px">
-    <col style="width:130px">
-    <col style="width:130px">
-    <col style="width:90px">`;
-  if(hasYtd) cg += `<col style="width:130px"><col style="width:130px"><col style="width:80px">`;
-  cg += `</colgroup>`;
-
-  // Single-row header with divider styling
-  const sepL = `border-left:2px solid var(--border)`;
-  let th = `<thead>
-    <tr class="ch">
-      <th style="width:70px">區域</th>
-      <th style="width:90px">業務</th>
-      <th class="r" style="background:#fdf0f2;color:var(--red)">2個月目標</th>
-      <th class="r" style="background:#fdf0f2;color:var(--red)">5月起累計</th>
-      <th class="c" style="background:#fdf0f2;color:var(--red)">達成率</th>`;
-  if(hasYtd) th += `
-      <th class="r" style="background:var(--blue-light);color:var(--blue);${sepL}">2026累計（1–${N}月）</th>
-      <th class="r" style="background:var(--blue-light);color:#999">2025同期</th>
-      <th class="r" style="background:var(--blue-light);color:var(--green)">YoY</th>`;
-  th += `</tr></thead>`;
-
-  let tb='<tbody>';
+  let html = '';
   let lastR='', totTgt=0, totAct=0, totY26=0, totY25=0;
 
   ROSTER.forEach(rep => {
-    const k=rKey(rep);
-    const sv=stored[`${type}_${k}`];
-    const seed=(SEEDS[type]||{})[k];
-    let actual=sv!==undefined?sv:(seed!==undefined?seed:'');
-    const target=targets[rep.name]||null;
-    const md=mtype&&MONTHLY[mtype]?.[k];
-    const y26=md?aSum(md.m26,N):null;
-    const y25=md?aSum(md.m25,N):null;
+    const k = rKey(rep);
+    const sv = stored[`${type}_${k}`];
+    const seed = (SEEDS[type]||{})[k];
+    let actual = sv!==undefined ? sv : (seed!==undefined ? seed : '');
+    const target = targets[rep.name] || null;
+    const md = mtype && MONTHLY[mtype]?.[k];
+    const y26 = md ? aSum(md.m26, N) : null;
+    const y25 = md ? aSum(md.m25, N) : null;
 
-    if(rep.region!==lastR){
-      tb+=`<tr class="rgn"><td colspan="${cols}">${rep.region}</td></tr>`;
-      lastR=rep.region;
+    if (rep.region !== lastR) {
+      html += `<div class="rgn-hdr">${rep.region}</div>`;
+      lastR = rep.region;
     }
 
-    const actCell=rep.miss
-      ?`<td class="r mono">${actual!==''?fN(actual):'—'}</td>`
-      :`<td><input class="ei" type="text" inputmode="numeric" placeholder="輸入累計"
-          value="${actual!==''?actual:''}" data-key="${type}_${k}"
-          onchange="handleInput(this)" onfocus="this.select()"></td>`;
+    const bCls = badgeCls(actual, target);
+    const bTxt = badgeTxt(actual, target);
+    const pw = progW(actual, target);
+    const pc = progColor(actual, target);
 
-    let row=`<tr class="${rep.miss?'miss':''}">
-      <td></td><td><span class="rn">${rep.name}</span></td>
-      <td class="r mono">${target?fN(target):'—'}</td>
-      ${actCell}
-      <td class="c">${mkBadge(actual,target)}</td>`;
-    if(hasYtd) row+=`<td class="n26" style="border-left:2px solid var(--border)">${y26!==null?fN(y26):'—'}</td><td class="n25">${y25!==null?fN(y25):'—'}</td><td>${mkYoy(y26,y25)}</td>`;
-    row+=`</tr>`;
-    tb+=row;
+    const actField = rep.miss
+      ? `<div class="rep-num-val ${actual!==''?'act-val':'na-val'}">${actual!==''?fN(actual):'—'}</div>`
+      : `<input class="num-input" type="text" inputmode="numeric" placeholder="輸入累計"
+           value="${actual!==''?actual:''}" data-key="${type}_${k}"
+           onchange="handleInput(this)" onfocus="this.select()">`;
 
-    if(target) totTgt+=target;
-    if(actual!==''&&!isNaN(Number(actual))) totAct+=Number(actual);
-    if(y26) totY26+=y26;
-    if(y25) totY25+=y25;
+    let ytdHtml = '';
+    if (hasYtd) {
+      const yoyTxt = (!y26||!y25) ? '—' : ((y26-y25)/y25>=0?'+':'')+((y26-y25)/y25*100).toFixed(1)+'%';
+      const yoyCls = (!y26||!y25)?'yf':((y26-y25)/y25>0.02?'yu':(y26-y25)/y25<-0.02?'yd':'yf');
+      ytdHtml = `
+        <div class="ytd-toggle" onclick="toggleYtd(this)">
+          <span>年度累計（1–${N}月）</span><span class="arr">▼</span>
+        </div>
+        <div class="ytd-body">
+          <div class="ytd-nums">
+            <div>
+              <div class="ytd-num-lbl">2026</div>
+              <div class="ytd-num-val ytd-26">${y26!==null?fN(y26):'—'}</div>
+            </div>
+            <div>
+              <div class="ytd-num-lbl">2025</div>
+              <div class="ytd-num-val ytd-25">${y25!==null?fN(y25):'—'}</div>
+            </div>
+            <div>
+              <div class="ytd-num-lbl">YoY</div>
+              <div class="ytd-num-val yoy ${yoyCls}">${yoyTxt}</div>
+            </div>
+          </div>
+        </div>`;
+    }
+
+    html += `
+    <div class="rep-card${rep.miss?' miss':''}">
+      <div class="rep-top">
+        <div class="rep-name">${rep.name}</div>
+        <div class="rep-badge ${bCls}">${bTxt}</div>
+      </div>
+      <div class="prog-wrap">
+        <div class="prog-bg">
+          <div class="prog-fill" style="width:${pw}%;background:${pc}"></div>
+        </div>
+      </div>
+      <div class="rep-nums">
+        <div class="rep-num-block">
+          <div class="rep-num-lbl">目標</div>
+          <div class="rep-num-val">${target?fN(target):'—'}</div>
+        </div>
+        <div class="rep-num-block">
+          <div class="rep-num-lbl">累計</div>
+          ${actField}
+        </div>
+      </div>
+      ${ytdHtml}
+    </div>`;
+
+    if (target) totTgt += target;
+    if (actual!==''&&!isNaN(Number(actual))) totAct += Number(actual);
+    if (y26) totY26 += y26;
+    if (y25) totY25 += y25;
   });
 
-  let totRow=`<tr class="tot">
-    <td></td><td class="rn">合計</td>
-    <td class="r mono">${fN(totTgt)}</td><td class="r mono">${fN(totAct)}</td>
-    <td class="c">${mkBadge(totAct,totTgt)}</td>`;
-  if(hasYtd) totRow+=`<td class="n26" style="border-left:2px solid var(--border)">${fN(totY26)}</td><td class="n25">${fN(totY25)}</td><td>${mkYoy(totY26,totY25)}</td>`;
-  totRow+=`</tr>`;
-  tb+=totRow+'</tbody>';
+  // Total card
+  const tbCls = badgeCls(totAct, totTgt);
+  const tbTxt = badgeTxt(totAct, totTgt);
+  const tpw = progW(totAct, totTgt);
+  const tpc = progColor(totAct, totTgt);
 
-  document.getElementById(tid).innerHTML=cg+th+tb;
+  let totYtd = '';
+  if (hasYtd) {
+    const yoyTxt = (!totY26||!totY25)?'—':((totY26-totY25)/totY25>=0?'+':'')+((totY26-totY25)/totY25*100).toFixed(1)+'%';
+    const yoyCls = (!totY26||!totY25)?'yf':((totY26-totY25)/totY25>0.02?'yu':(totY26-totY25)/totY25<-0.02?'yd':'yf');
+    totYtd = `
+      <div style="margin-top:10px;padding-top:9px;border-top:1px dashed var(--border)">
+        <div class="ytd-nums">
+          <div><div class="ytd-num-lbl">2026累計</div><div class="ytd-num-val ytd-26">${fN(totY26)}</div></div>
+          <div><div class="ytd-num-lbl">2025同期</div><div class="ytd-num-val ytd-25">${fN(totY25)}</div></div>
+          <div><div class="ytd-num-lbl">YoY</div><div class="ytd-num-val yoy ${yoyCls}">${yoyTxt}</div></div>
+        </div>
+      </div>`;
+  }
+
+  html += `
+  <div class="tot-card">
+    <div class="rep-top">
+      <div class="rep-name" style="font-size:14px;letter-spacing:1.5px;color:var(--sub)">合 計</div>
+      <div class="rep-badge ${tbCls}">${tbTxt}</div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-bg"><div class="prog-fill" style="width:${tpw}%;background:${tpc}"></div></div>
+    </div>
+    <div class="rep-nums">
+      <div class="rep-num-block">
+        <div class="rep-num-lbl">總目標</div>
+        <div class="rep-num-val">${fN(totTgt)}</div>
+      </div>
+      <div class="rep-num-block">
+        <div class="rep-num-lbl">總累計</div>
+        <div class="rep-num-val act-val">${fN(totAct)}</div>
+      </div>
+    </div>
+    ${totYtd}
+  </div>`;
 
   // Legend
-  const leg=document.getElementById('leg-'+tid.replace('t-',''));
-  if(leg) leg.innerHTML=`
+  const leg = document.getElementById('leg-'+cid.replace('cards-',''));
+  if (leg) leg.innerHTML = `
     <div class="leg-i"><div class="leg-d" style="background:var(--green)"></div>達成率 ≥ 40%</div>
     <div class="leg-i"><div class="leg-d" style="background:#f0a000"></div>20–39%</div>
     <div class="leg-i"><div class="leg-d" style="background:var(--red)"></div>&lt; 20%</div>
-    ${hasYtd?'<div class="leg-i"><div class="leg-d" style="background:var(--blue);border-radius:2px"></div>藍色 = 2026累計　灰色 = 2025同期</div>':''}
-    <div class="leg-note">缺區不計目標</div>`;
+    <div style="width:100%;font-size:10px;color:var(--faint);margin-top:2px">缺區不計目標</div>`;
+
+  document.getElementById(cid).innerHTML = html;
 
   return { tgt:totTgt, act:totAct, rate:totTgt>0&&totAct>0?totAct/totTgt:null };
 }
 
+// ── YTD TOGGLE ────────────────────────────────────────
+function toggleYtd(el) {
+  el.classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
 // ── CARDS ─────────────────────────────────────────────
-function updateCard(vid,sid,rate,tgt,act) {
-  const el=document.getElementById(vid), sub=document.getElementById(sid);
-  if(rate===null){el.innerHTML='<span class="card-na">待輸入</span>';sub.textContent='';return;}
-  const pct=(rate*100).toFixed(1);
-  const col=rate>=0.4?'var(--green)':rate>=0.2?'var(--amber)':'var(--red)';
-  el.innerHTML=`<span style="color:${col}">${pct}<span class="u">%</span></span>`;
-  sub.textContent=`目標 ${fN(tgt)}　累計 ${fN(act)}`;
+function updateCard(vid, sid, rate, tgt, act) {
+  const el = document.getElementById(vid), sub = document.getElementById(sid);
+  if (rate===null) { el.innerHTML='<span class="sum-na">待輸入</span>'; sub.textContent=''; return; }
+  const pct = (rate*100).toFixed(1);
+  const col = rate>=0.4?'var(--green)':rate>=0.2?'var(--amber)':'var(--red)';
+  el.innerHTML = `<span style="color:${col}">${pct}<span class="u">%</span></span>`;
+  sub.textContent = `目標 ${fN(tgt)} 累計 ${fN(act)}`;
 }
 
 // ── RENDER ALL ────────────────────────────────────────
 function renderAll() {
-  const s=loadS();
-  const r0=renderTable('t-trad-ns',   'tradNs',   s);
-  const r1=renderTable('t-chain-ns',  'chainNs',  s);
-  const r2=renderTable('t-trad-coll', 'tradColl', s);
-  const r3=renderTable('t-chain-coll','chainColl',s);
+  const s = loadS();
+  const r0 = renderCards('cards-trad-ns',    'tradNs',   s);
+  const r1 = renderCards('cards-chain-ns',   'chainNs',  s);
+  const r2 = renderCards('cards-trad-coll',  'tradColl', s);
+  const r3 = renderCards('cards-chain-coll', 'chainColl',s);
   updateCard('c0','c0s',r0.rate,r0.tgt,r0.act);
   updateCard('c1','c1s',r1.rate,r1.tgt,r1.act);
   updateCard('c2','c2s',r2.rate,r2.tgt,r2.act);
@@ -521,19 +617,17 @@ function renderAll() {
 
 // ── INPUT ─────────────────────────────────────────────
 function handleInput(el) {
-  const raw=el.value.replace(/,/g,'').trim();
-  const num=parseFloat(raw);
-  if(raw===''||isNaN(num)){el.value='';saveV(el.dataset.key,'');}
-  else{el.value=Math.round(num);saveV(el.dataset.key,Math.round(num));}
+  const raw = el.value.replace(/,/g,'').trim();
+  const num = parseFloat(raw);
+  if (raw===''||isNaN(num)) { el.value=''; saveV(el.dataset.key,''); }
+  else { el.value=Math.round(num); saveV(el.dataset.key,Math.round(num)); }
   renderAll();
 }
 
 // ── TAB SWITCHING ─────────────────────────────────────
-let curChannel='trad', curSub={trad:'ns', chain:'ns'};
-
 function switchChannel(ch, btn) {
-  curChannel=ch;
-  document.querySelectorAll('.l1-tab').forEach(b=>b.classList.remove('on'));
+  curChannel = ch;
+  document.querySelectorAll('.ch-tab').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.getElementById('ch-trad').style.display  = ch==='trad'  ? '' : 'none';
   document.getElementById('ch-chain').style.display = ch==='chain' ? '' : 'none';
@@ -541,8 +635,8 @@ function switchChannel(ch, btn) {
 }
 
 function switchSub(ch, sub, btn) {
-  curSub[ch]=sub;
-  document.querySelectorAll(`#ch-${ch} .l2-tab`).forEach(b=>b.classList.remove('on'));
+  curSub[ch] = sub;
+  document.querySelectorAll(`#ch-${ch} .sub-tab`).forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
   document.querySelectorAll(`#ch-${ch} .pane`).forEach(p=>p.classList.remove('on'));
   document.getElementById(`p-${ch}-${sub}`).classList.add('on');
@@ -550,45 +644,44 @@ function switchSub(ch, sub, btn) {
 }
 
 function jumpTo(ch, sub) {
-  // Switch channel tab
-  const l1btn=document.getElementById(`l1-${ch}`);
+  const l1btn = document.getElementById(`l1-${ch}`);
   switchChannel(ch, l1btn);
-  // Switch sub tab
-  const l2btn=document.getElementById(`l2-${ch}-${sub}`);
+  const l2btn = document.getElementById(`l2-${ch}-${sub}`);
   switchSub(ch, sub, l2btn);
-  document.querySelector('.tab-shell').scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelector('.ch-tabs').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function updateCardHighlight() {
-  const map={
-    'trad-ns':'card-trad-ns', 'trad-coll':'card-trad-coll',
-    'chain-ns':'card-chain-ns', 'chain-coll':'card-chain-coll',
+  const map = {
+    'trad-ns':'card-trad-ns','trad-coll':'card-trad-coll',
+    'chain-ns':'card-chain-ns','chain-coll':'card-chain-coll',
   };
-  const active=`${curChannel}-${curSub[curChannel]}`;
+  const active = `${curChannel}-${curSub[curChannel]}`;
   Object.values(map).forEach(id=>document.getElementById(id).classList.remove('active-card'));
   document.getElementById(map[active])?.classList.add('active-card');
 }
 
-// ── PERIOD / CLEAR ────────────────────────────────────
-function setPeriod(btn,p){
-  curP=p;
+function setPeriod(btn, p) {
+  curP = p;
   document.querySelectorAll('.pbtn').forEach(b=>b.classList.remove('on'));
   btn.classList.add('on');
-  document.getElementById('savedTime').textContent='尚未儲存';
+  document.getElementById('savedTime').textContent = '尚未儲存';
   renderAll();
 }
-function clearAll(e){
+
+function clearAll(e) {
   e.preventDefault();
-  if(!confirm(`確定清除「${PERIODS[curP].label}」手動輸入數據？`)) return;
+  if (!confirm(`確定清除「${PERIODS[curP].label}」手動輸入數據？`)) return;
   localStorage.removeItem(sKey());
-  document.getElementById('savedTime').textContent='尚未儲存';
+  document.getElementById('savedTime').textContent = '尚未儲存';
   renderAll();
 }
 
 // ── INIT ──────────────────────────────────────────────
-document.getElementById('rptDate').value=new Date().toISOString().slice(0,10);
+document.getElementById('rptDate').value = new Date().toISOString().slice(0,10);
 renderAll();
 </script>
 </body>
 </html>
+
 
