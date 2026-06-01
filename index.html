@@ -387,10 +387,10 @@ const PERIODS = {
 };
 
 const SEEDS = {
-  tradNs:   {'謝明祥':221171,'連國廷':123550,'洪裕銘':295833,'桃竹缺區':236654,'徐瑞廷':213628,'何星諺':209521,'許峯閔':149227,'陳其宏':217817,'南區缺區':112422},
-  chainNs:  {'謝明祥':183749,'連國廷':1080571,'洪裕銘':71095,'桃竹缺區':203773,'徐瑞廷':423805,'何星諺':56869,'許峯閔':67361,'陳其宏':535354,'南區缺區':57001},
-  tradColl: {},
-  chainColl:{},
+  tradNs:   {'謝明祥':304574,'連國廷':204234,'洪裕銘':375073,'曾瑞真':324205,'徐瑞廷':293938,'何星諺':248865,'許峯閔':149227,'陳其宏':241545,'黃翎婕':159331},
+  chainNs:  {'謝明祥':230151,'連國廷':1424921,'洪裕銘':80605,'曾瑞真':354000,'徐瑞廷':617817,'何星諺':65869,'許峯閔':67361,'陳其宏':547554,'黃翎婕':56752},
+  tradColl: {'謝明祥':385514,'連國廷':191779,'洪裕銘':208315,'曾瑞真':51758,'徐瑞廷':159699,'何星諺':101686,'許峯閔':202939,'陳其宏':143760,'黃翎婕':0},
+  chainColl:{'謝明祥':44378,'連國廷':357622,'洪裕銘':16177,'曾瑞真':0,'徐瑞廷':487705,'何星諺':0,'許峯閔':0,'陳其宏':487494,'黃翎婕':9666},
 };
 
 const NS_TYPE = { tradNs:'trad', chainNs:'chain', tradColl:null, chainColl:null };
@@ -453,7 +453,7 @@ function renderCards(cid, type, stored) {
     const k = rKey(rep);
     const sv = stored[`${type}_${k}`];
     const seed = (SEEDS[type]||{})[k];
-    let actual = sv!==undefined ? sv : (seed!==undefined ? seed : '');
+    let actual = (sv!==undefined && sv!=='') ? sv : (seed!==undefined ? seed : '');
     const target = targets[rep.name] || null;
     const md = mtype && MONTHLY[mtype]?.[k];
     const y26 = md ? aSum(md.m26, N) : null;
@@ -683,6 +683,7 @@ renderAll();
 </script>
 </body>
 </html>
+
 
 
 
