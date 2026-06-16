@@ -33,10 +33,7 @@
   .leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
   .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
-  .progress-info { background: #fff5f5; border-left: 3px solid #C62828; border-radius: 0 8px 8px 0; padding: 9px 12px; margin-bottom: 14px; font-size: 12px; color: #7f1010; line-height: 1.6; }
-
   .sec-hdr { font-size: 13px; font-weight: 600; color: #555; letter-spacing: 0.04em; margin-bottom: 10px; padding-left: 4px; }
-
   .region-divider { font-size: 11px; font-weight: 700; color: #C62828; letter-spacing: 0.08em; padding: 10px 4px 6px; border-bottom: 1.5px solid #C62828; margin-bottom: 10px; }
 
   .p-card { background: #fff; border-radius: 16px; padding: 14px 16px; margin-bottom: 10px; border: 0.5px solid rgba(0,0,0,0.07); }
@@ -73,7 +70,7 @@
 <div class="header">
   <div class="header-top">
     <div class="header-title">🏢 拉法業績追蹤</div>
-    <div class="update-badge">截至 5/31</div>
+    <div class="update-badge">截至 6/15</div>
   </div>
   <div class="tabs">
     <button class="tab active" onclick="setView('all',this)">全員總覽</button>
@@ -84,17 +81,17 @@
 
 <div class="content">
   <div class="note-box">
-    📌 5/31 已完成雙月期 50% 時間進度<br>
-    達標門檻已依時間進度調整：≥55% 達標・40–54% 預警・&lt;40% 落後<br>
-    同期 YoY 基準：2025 年 5-6 月完整期
+    📌 6/15 已完成雙月期約 75% 時間進度<br>
+    達標門檻依進度調整：≥70% 達標・50–69% 預警・&lt;50% 落後<br>
+    同期 YoY 基準：2025年5/1–6/15 估算值（5月全月＋6月前半）
   </div>
 
   <div class="summary-grid" id="summaryCards"></div>
 
   <div class="legend">
-    <div class="leg-item"><div class="leg-dot" style="background:#2E7D32"></div>達標 ≥55%（超前進度）</div>
-    <div class="leg-item"><div class="leg-dot" style="background:#E65100"></div>預警 40–54%</div>
-    <div class="leg-item"><div class="leg-dot" style="background:#C62828"></div>落後 &lt;40%</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#2E7D32"></div>達標 ≥70%（超前進度）</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#E65100"></div>預警 50–69%</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#C62828"></div>落後 &lt;50%</div>
   </div>
 
   <div class="sec-hdr" id="secHdr">各業務進度</div>
@@ -104,51 +101,52 @@
 <script>
 const DATA = [
   { name:"謝明祥", region:"北區",
-    trad:{ sale_rate:54.5, recv_rate:110.8, yoy:-46.8, ytd_yoy:9.0 },
-    chain:{ sale_rate:47.2, yoy:-46.8, ytd_yoy:31.7 }
+    trad:{ sale_rate:79.6, recv_rate:170.2, yoy:7.3, ytd_yoy:9.0 },
+    chain:{ sale_rate:80.8, yoy:22.3, ytd_yoy:31.7 }
   },
   { name:"連國廷", region:"北區",
-    trad:{ sale_rate:37.0, recv_rate:76.6, yoy:-59.9, ytd_yoy:-17.0 },
-    chain:{ sale_rate:27.6, yoy:-69.2, ytd_yoy:0.9 }
+    trad:{ sale_rate:60.3, recv_rate:93.8, yoy:-12.9, ytd_yoy:-17.0 },
+    chain:{ sale_rate:43.9, yoy:-30.4, ytd_yoy:0.9 }
   },
   { name:"洪裕銘", region:"北區",
-    trad:{ sale_rate:49.7, recv_rate:56.2, yoy:-51.4, ytd_yoy:-4.5 },
-    chain:{ sale_rate:4.1, yoy:-32.0, ytd_yoy:999 }
+    trad:{ sale_rate:66.5, recv_rate:75.1, yoy:-12.9, ytd_yoy:-4.5 },
+    chain:{ sale_rate:6.3, yoy:63.7, ytd_yoy:999 }
   },
   { name:"曾瑞真", region:"桃竹",
-    trad:{ sale_rate:40.1, recv_rate:0.4, yoy:-60.8, ytd_yoy:1.9 },
-    chain:{ sale_rate:46.3, yoy:-47.8, ytd_yoy:20.6 }
+    trad:{ sale_rate:70.2, recv_rate:14.5, yoy:-8.5, ytd_yoy:1.9 },
+    chain:{ sale_rate:64.1, yoy:7.2, ytd_yoy:20.6 }
   },
   { name:"徐瑞廷", region:"中區",
-    trad:{ sale_rate:47.7, recv_rate:47.0, yoy:-53.4, ytd_yoy:-12.2 },
-    chain:{ sale_rate:49.1, yoy:-44.7, ytd_yoy:7.9 }
+    trad:{ sale_rate:76.5, recv_rate:65.2, yoy:-1.9, ytd_yoy:-12.2 },
+    chain:{ sale_rate:75.0, yoy:6.6, ytd_yoy:7.9 }
   },
   { name:"何星諺", region:"中區",
-    trad:{ sale_rate:45.1, recv_rate:36.3, yoy:-47.3, ytd_yoy:-1.3 },
-    chain:{ sale_rate:18.7, yoy:-78.9, ytd_yoy:-1.3 }
+    trad:{ sale_rate:65.3, recv_rate:84.8, yoy:2.8, ytd_yoy:-1.3 },
+    chain:{ sale_rate:25.5, yoy:-48.4, ytd_yoy:-1.3 }
   },
   { name:"許峯閔", region:"南區",
-    trad:{ sale_rate:27.0, recv_rate:74.0, yoy:-70.4, ytd_yoy:-22.2 },
-    chain:{ sale_rate:25.3, yoy:-73.1, ytd_yoy:-28.1 }
+    trad:{ sale_rate:50.9, recv_rate:134.8, yoy:-27.7, ytd_yoy:-22.2 },
+    chain:{ sale_rate:28.7, yoy:-67.0, ytd_yoy:-28.1 }
   },
   { name:"陳其宏", region:"南區",
-    trad:{ sale_rate:43.7, recv_rate:49.9, yoy:-34.8, ytd_yoy:-13.2 },
-    chain:{ sale_rate:51.0, yoy:-43.7, ytd_yoy:27.8 }
+    trad:{ sale_rate:60.6, recv_rate:66.9, yoy:15.8, ytd_yoy:-13.2 },
+    chain:{ sale_rate:57.4, yoy:-8.3, ytd_yoy:27.8 }
   },
   { name:"黃翎婕", region:"南區",
-    trad:{ sale_rate:28.8, recv_rate:0.0, yoy:-66.4, ytd_yoy:-19.8 },
-    chain:{ sale_rate:25.0, yoy:-86.5, ytd_yoy:-16.8 }
+    trad:{ sale_rate:43.3, recv_rate:2.7, yoy:-35.0, ytd_yoy:-19.8 },
+    chain:{ sale_rate:46.8, yoy:-67.7, ytd_yoy:-16.8 }
   }
 ];
 
 let currentView = 'all';
 
 function statusClass(rate) {
-  if (rate >= 55) return 'ok';
-  if (rate >= 40) return 'warn';
+  if (rate >= 70) return 'ok';
+  if (rate >= 50) return 'warn';
   return 'bad';
 }
 function numClass(v) {
+  if (v === null) return 'num-warn';
   if (v >= 0) return 'num-ok';
   if (v >= -20) return 'num-warn';
   return 'num-bad';
@@ -158,7 +156,6 @@ function fmt(v) {
   if (v === null || v === undefined) return '-';
   return (v > 0 ? '+' : '') + v.toFixed(1) + '%';
 }
-
 function getSaleRate(d) {
   if (currentView === 'chain') return d.chain.sale_rate;
   if (currentView === 'trad') return d.trad.sale_rate;
@@ -167,29 +164,28 @@ function getSaleRate(d) {
 
 function renderSummary() {
   const sc = document.getElementById('summaryCards');
-  let totSale = 0, totRecv = 0, totYoy = 0, totYtd = 0, ytdCnt = 0;
+  let totSale=0, totRecv=0, totYoy=0, totYtd=0, ytdCnt=0;
   DATA.forEach(d => {
     totSale += getSaleRate(d);
     totRecv += d.trad.recv_rate;
-    totYoy += (currentView === 'chain' ? d.chain.yoy : currentView === 'trad' ? d.trad.yoy : (d.trad.yoy + d.chain.yoy) / 2);
-    const ytdv = currentView === 'chain' ? (d.chain.ytd_yoy < 900 ? d.chain.ytd_yoy : null)
-               : currentView === 'trad' ? d.trad.ytd_yoy
-               : (d.trad.ytd_yoy + (d.chain.ytd_yoy < 900 ? d.chain.ytd_yoy : d.trad.ytd_yoy)) / 2;
-    if (ytdv !== null) { totYtd += ytdv; ytdCnt++; }
+    totYoy += currentView==='chain' ? d.chain.yoy : currentView==='trad' ? d.trad.yoy : (d.trad.yoy+d.chain.yoy)/2;
+    const ytdv = currentView==='chain' ? (d.chain.ytd_yoy>=900 ? null : d.chain.ytd_yoy)
+               : currentView==='trad' ? d.trad.ytd_yoy
+               : (d.trad.ytd_yoy + (d.chain.ytd_yoy<900 ? d.chain.ytd_yoy : d.trad.ytd_yoy))/2;
+    if (ytdv!==null) { totYtd+=ytdv; ytdCnt++; }
   });
-  const n = DATA.length;
-  const avgSale = totSale / n, avgRecv = totRecv / n, avgYoy = totYoy / n, avgYtd = totYtd / ytdCnt;
+  const n=DATA.length;
+  const avgSale=totSale/n, avgRecv=totRecv/n, avgYoy=totYoy/n, avgYtd=totYtd/ytdCnt;
+  function vc(v,hi,lo){ return v>=hi?'c-green':v>=lo?'c-orange':'c-red'; }
 
-  function valClass(v, hi, lo) { return v >= hi ? 'c-green' : v >= lo ? 'c-orange' : 'c-red'; }
-
-  const recvSection = currentView === 'chain'
-    ? `<div class="s-val" style="color:#bbb;font-size:18px;padding-top:4px">無收款目標</div>`
-    : `<div class="s-val ${valClass(avgRecv,55,40)}">${avgRecv.toFixed(1)}%</div>`;
+  const recvSection = currentView==='chain'
+    ? `<div class="s-val" style="color:#bbb;font-size:16px;padding-top:6px">無收款目標</div>`
+    : `<div class="s-val ${vc(avgRecv,70,50)}">${avgRecv.toFixed(1)}%</div>`;
 
   sc.innerHTML = `
     <div class="s-card">
       <div class="s-lbl">5-6月 銷售達成率</div>
-      <div class="s-val ${valClass(avgSale,55,40)}">${avgSale.toFixed(1)}%</div>
+      <div class="s-val ${vc(avgSale,70,50)}">${avgSale.toFixed(1)}%</div>
       <div class="s-sub">全隊平均</div>
     </div>
     <div class="s-card">
@@ -199,12 +195,12 @@ function renderSummary() {
     </div>
     <div class="s-card">
       <div class="s-lbl">同期 YoY</div>
-      <div class="s-val ${valClass(avgYoy,0,-20)}">${fmt(avgYoy)}</div>
-      <div class="s-sub">vs 2025年5-6月</div>
+      <div class="s-val ${vc(avgYoy,0,-20)}">${fmt(avgYoy)}</div>
+      <div class="s-sub">vs 2025年同期</div>
     </div>
     <div class="s-card">
       <div class="s-lbl">年度累計 YTD</div>
-      <div class="s-val ${valClass(avgYtd,0,-10)}">${fmt(avgYtd)}</div>
+      <div class="s-val ${vc(avgYtd,0,-10)}">${fmt(avgYtd)}</div>
       <div class="s-sub">2026 vs 2025 同期</div>
     </div>`;
 }
@@ -214,31 +210,29 @@ function renderCards() {
   const regions = ['北區','桃竹','中區','南區'];
   let html = '';
   regions.forEach(reg => {
-    const group = DATA.filter(d => d.region === reg);
+    const group = DATA.filter(d => d.region===reg);
     if (!group.length) return;
     html += `<div class="region-divider">${reg}</div>`;
     group.forEach(d => {
       const saleRate = getSaleRate(d);
       const st = statusClass(saleRate);
-      const yoy = currentView === 'chain' ? d.chain.yoy
-                : currentView === 'trad' ? d.trad.yoy
-                : (d.trad.yoy + d.chain.yoy) / 2;
-      const ytdRaw = currentView === 'chain' ? (d.chain.ytd_yoy >= 900 ? null : d.chain.ytd_yoy)
-                   : currentView === 'trad' ? d.trad.ytd_yoy
-                   : (d.trad.ytd_yoy + (d.chain.ytd_yoy < 900 ? d.chain.ytd_yoy : d.trad.ytd_yoy)) / 2;
-      const ytdDisplay = ytdRaw === null ? '基期低' : fmt(ytdRaw);
-      const ytdCC = ytdRaw === null ? 'num-warn' : numClass(ytdRaw);
+      const yoy = currentView==='chain' ? d.chain.yoy : currentView==='trad' ? d.trad.yoy : (d.trad.yoy+d.chain.yoy)/2;
+      const ytdRaw = currentView==='chain' ? (d.chain.ytd_yoy>=900 ? null : d.chain.ytd_yoy)
+                   : currentView==='trad' ? d.trad.ytd_yoy
+                   : (d.trad.ytd_yoy + (d.chain.ytd_yoy<900 ? d.chain.ytd_yoy : d.trad.ytd_yoy))/2;
+      const ytdDisplay = ytdRaw===null ? '基期低' : fmt(ytdRaw);
+      const ytdCC = ytdRaw===null ? 'num-warn' : numClass(ytdRaw);
+      const pillLabel = {ok:'達標',warn:'預警',bad:'落後'}[st];
 
-      const pillLabel = {ok:'達標', warn:'預警', bad:'落後'}[st];
-
-      const recvHtml = currentView !== 'chain' ? `
+      const recvSt = statusClass(d.trad.recv_rate);
+      const recvHtml = currentView!=='chain' ? `
         <div class="prog-section">
           <div class="prog-row">
             <span class="prog-label">傳統收款達成</span>
-            <span class="prog-pct ${numClass(d.trad.recv_rate - 40)}">${d.trad.recv_rate.toFixed(1)}%</span>
+            <span class="prog-pct num-${recvSt}">${d.trad.recv_rate.toFixed(1)}%</span>
           </div>
           <div class="bar-bg">
-            <div class="bar-fill" style="width:${Math.min(d.trad.recv_rate,100)}%;background:${barColor(statusClass(d.trad.recv_rate))}"></div>
+            <div class="bar-fill" style="width:${Math.min(d.trad.recv_rate,100)}%;background:${barColor(recvSt)}"></div>
           </div>
         </div>` : '';
 
@@ -277,8 +271,8 @@ function setView(view, el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
   document.getElementById('secHdr').textContent =
-    view === 'chain' ? '連鎖通路｜各業務進度' :
-    view === 'trad'  ? '傳統通路｜各業務進度' : '各業務進度';
+    view==='chain' ? '連鎖通路｜各業務進度' :
+    view==='trad'  ? '傳統通路｜各業務進度' : '各業務進度';
   renderSummary();
   renderCards();
 }
@@ -288,4 +282,3 @@ renderCards();
 </script>
 </body>
 </html>
-
