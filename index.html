@@ -63,6 +63,8 @@
   .num-bad { color: #C62828; }
 
   .note-box { background: #FFF8F8; border-left: 3px solid #C62828; border-radius: 0 8px 8px 0; padding: 10px 12px; margin-bottom: 14px; font-size: 12px; color: #7f1010; line-height: 1.7; }
+  .new-badge { display:inline-block; font-size:11px; font-weight:700; color:#6A1B9A; background:#F3E5F5; border-radius:6px; padding:2px 8px; margin-left:7px; vertical-align:middle; }
+  .recv-na { font-size:12px; color:#aaa; padding-top:10px; border-top:0.5px solid #f0f0f0; }
 </style>
 </head>
 <body>
@@ -100,39 +102,39 @@
 
 <script>
 const DATA = [
-  { name:"謝明祥", region:"北區",
+  { name:"謝明祥", region:"北區", isNew:false,
     trad:{ sale_rate:79.6, recv_rate:170.2, yoy:7.3, ytd_yoy:9.0 },
     chain:{ sale_rate:80.8, yoy:22.3, ytd_yoy:31.7 }
   },
-  { name:"連國廷", region:"北區",
+  { name:"連國廷", region:"北區", isNew:false,
     trad:{ sale_rate:60.3, recv_rate:93.8, yoy:-12.9, ytd_yoy:-17.0 },
     chain:{ sale_rate:43.9, yoy:-30.4, ytd_yoy:0.9 }
   },
-  { name:"洪裕銘", region:"北區",
+  { name:"洪裕銘", region:"北區", isNew:false,
     trad:{ sale_rate:66.5, recv_rate:75.1, yoy:-12.9, ytd_yoy:-4.5 },
     chain:{ sale_rate:6.3, yoy:63.7, ytd_yoy:999 }
   },
-  { name:"曾瑞真", region:"桃竹",
+  { name:"曾瑞真", region:"桃竹", isNew:true,
     trad:{ sale_rate:70.2, recv_rate:14.5, yoy:-8.5, ytd_yoy:1.9 },
     chain:{ sale_rate:64.1, yoy:7.2, ytd_yoy:20.6 }
   },
-  { name:"徐瑞廷", region:"中區",
+  { name:"徐瑞廷", region:"中區", isNew:false,
     trad:{ sale_rate:76.5, recv_rate:65.2, yoy:-1.9, ytd_yoy:-12.2 },
     chain:{ sale_rate:75.0, yoy:6.6, ytd_yoy:7.9 }
   },
-  { name:"何星諺", region:"中區",
+  { name:"何星諺", region:"中區", isNew:false,
     trad:{ sale_rate:65.3, recv_rate:84.8, yoy:2.8, ytd_yoy:-1.3 },
     chain:{ sale_rate:25.5, yoy:-48.4, ytd_yoy:-1.3 }
   },
-  { name:"許峯閔", region:"南區",
+  { name:"許峯閔", region:"南區", isNew:false,
     trad:{ sale_rate:50.9, recv_rate:134.8, yoy:-27.7, ytd_yoy:-22.2 },
     chain:{ sale_rate:28.7, yoy:-67.0, ytd_yoy:-28.1 }
   },
-  { name:"陳其宏", region:"南區",
+  { name:"陳其宏", region:"南區", isNew:false,
     trad:{ sale_rate:60.6, recv_rate:66.9, yoy:15.8, ytd_yoy:-13.2 },
     chain:{ sale_rate:57.4, yoy:-8.3, ytd_yoy:27.8 }
   },
-  { name:"黃翎婕", region:"南區",
+  { name:"黃翎婕", region:"南區", isNew:true,
     trad:{ sale_rate:43.3, recv_rate:2.7, yoy:-35.0, ytd_yoy:-19.8 },
     chain:{ sale_rate:46.8, yoy:-67.7, ytd_yoy:-16.8 }
   }
@@ -223,24 +225,28 @@ function renderCards() {
       const ytdDisplay = ytdRaw===null ? '基期低' : fmt(ytdRaw);
       const ytdCC = ytdRaw===null ? 'num-warn' : numClass(ytdRaw);
       const pillLabel = {ok:'達標',warn:'預警',bad:'落後'}[st];
+      const newBadge = d.isNew ? `<span class="new-badge">🌱 新人</span>` : '';
 
       const recvSt = statusClass(d.trad.recv_rate);
-      const recvHtml = currentView!=='chain' ? `
-        <div class="prog-section">
-          <div class="prog-row">
-            <span class="prog-label">傳統收款達成</span>
-            <span class="prog-pct num-${recvSt}">${d.trad.recv_rate.toFixed(1)}%</span>
-          </div>
-          <div class="bar-bg">
-            <div class="bar-fill" style="width:${Math.min(d.trad.recv_rate,100)}%;background:${barColor(recvSt)}"></div>
-          </div>
-        </div>` : '';
+      const recvHtml = currentView!=='chain'
+        ? (d.isNew
+          ? `<div class="recv-na">傳統收款｜到職適用中，暫不計入考核</div>`
+          : `<div class="prog-section">
+              <div class="prog-row">
+                <span class="prog-label">傳統收款達成</span>
+                <span class="prog-pct num-${recvSt}">${d.trad.recv_rate.toFixed(1)}%</span>
+              </div>
+              <div class="bar-bg">
+                <div class="bar-fill" style="width:${Math.min(d.trad.recv_rate,100)}%;background:${barColor(recvSt)}"></div>
+              </div>
+            </div>`)
+        : '';
 
       html += `
         <div class="p-card">
           <div class="p-top">
             <div>
-              <div class="p-name">${d.name}</div>
+              <div class="p-name">${d.name}${newBadge}</div>
               <div class="p-region-tag">${d.region}</div>
             </div>
             <div class="pill pill-${st}">${pillLabel}</div>
@@ -282,3 +288,4 @@ renderCards();
 </script>
 </body>
 </html>
+
