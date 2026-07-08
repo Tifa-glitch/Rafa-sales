@@ -3,24 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>拉法業績追蹤 | 5-6月</title>
+<title>拉法業績追蹤</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Noto Sans TC", sans-serif; background: #F4F3EE; min-height: 100vh; padding: 0 0 32px; }
 
   .header { background: #C62828; padding: 18px 16px 14px; position: sticky; top: 0; z-index: 100; }
   .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .header-title { font-size: 20px; font-weight: 700; color: #fff; letter-spacing: 0.02em; }
+  .header-title { font-size: 20px; font-weight: 700; color: #fff; }
   .update-badge { font-size: 12px; color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.18); border-radius: 6px; padding: 4px 10px; }
 
   .tabs { display: flex; gap: 6px; }
-  .tab { flex: 1; text-align: center; font-size: 14px; font-weight: 500; padding: 9px 0; border-radius: 8px; cursor: pointer; border: none; transition: background 0.18s, color 0.18s; background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.8); }
+  .tab { flex: 1; text-align: center; font-size: 14px; font-weight: 500; padding: 9px 0; border-radius: 8px; cursor: pointer; border: none; background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.8); }
   .tab.active { background: #fff; color: #C62828; font-weight: 700; }
 
   .content { padding: 14px 12px 0; }
 
+  .loading { text-align: center; padding: 60px 20px; color: #999; font-size: 14px; }
+
+  .note-box { background: #FFF8F8; border-left: 3px solid #C62828; border-radius: 0 8px 8px 0; padding: 10px 12px; margin-bottom: 14px; font-size: 12px; color: #7f1010; line-height: 1.7; }
+
+  .alert-box { background: #FFF3E0; border: 1px solid #FFB74D; border-radius: 12px; padding: 12px 14px; margin-bottom: 14px; }
+  .alert-title { font-size: 13px; font-weight: 700; color: #BF360C; margin-bottom: 6px; }
+  .alert-item { font-size: 13px; color: #6d4c41; line-height: 1.8; }
+
   .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
-  .s-card { background: #fff; border-radius: 14px; padding: 14px 14px 12px; border: 0.5px solid rgba(0,0,0,0.07); }
+  .s-card { background: #fff; border-radius: 14px; padding: 14px; border: 0.5px solid rgba(0,0,0,0.07); }
   .s-lbl { font-size: 12px; color: #888; margin-bottom: 6px; }
   .s-val { font-size: 26px; font-weight: 700; line-height: 1; }
   .s-sub { font-size: 12px; margin-top: 5px; color: #999; }
@@ -31,9 +39,9 @@
 
   .legend { display: flex; gap: 14px; margin-bottom: 14px; flex-wrap: wrap; }
   .leg-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
-  .leg-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .leg-dot { width: 10px; height: 10px; border-radius: 50%; }
 
-  .sec-hdr { font-size: 13px; font-weight: 600; color: #555; letter-spacing: 0.04em; margin-bottom: 10px; padding-left: 4px; }
+  .sec-hdr { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 10px; padding-left: 4px; }
   .region-divider { font-size: 11px; font-weight: 700; color: #C62828; letter-spacing: 0.08em; padding: 10px 4px 6px; border-bottom: 1.5px solid #C62828; margin-bottom: 10px; }
 
   .p-card { background: #fff; border-radius: 16px; padding: 14px 16px; margin-bottom: 10px; border: 0.5px solid rgba(0,0,0,0.07); }
@@ -46,13 +54,21 @@
   .pill-warn { background: #FFF3E0; color: #BF360C; }
   .pill-bad { background: #FFEBEE; color: #B71C1C; }
 
-  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 12px; }
+  .new-badge { display:inline-block; font-size:11px; font-weight:700; color:#6A1B9A; background:#F3E5F5; border-radius:6px; padding:2px 8px; margin-left:7px; vertical-align:middle; }
+
+  .metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-bottom: 10px; }
   .m-box { background: #FAF9F6; border-radius: 10px; padding: 10px 6px 8px; text-align: center; }
   .m-num { font-size: 17px; font-weight: 700; line-height: 1; }
   .m-lbl { font-size: 10px; color: #999; margin-top: 5px; line-height: 1.4; }
 
+  .forecast-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #666; padding: 6px 2px; }
+  .forecast-arrow { font-size: 13px; }
+  .trend-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-left: auto; }
+  .trend-up { background: #E8F5E9; color: #1B5E20; }
+  .trend-down { background: #FFEBEE; color: #B71C1C; }
+
   .prog-section { border-top: 0.5px solid #f0f0f0; padding-top: 10px; }
-  .prog-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+  .prog-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
   .prog-label { font-size: 12px; color: #666; }
   .prog-pct { font-size: 13px; font-weight: 700; }
   .bar-bg { height: 7px; background: #EEEDE8; border-radius: 4px; overflow: hidden; }
@@ -62,9 +78,8 @@
   .num-warn { color: #E65100; }
   .num-bad { color: #C62828; }
 
-  .note-box { background: #FFF8F8; border-left: 3px solid #C62828; border-radius: 0 8px 8px 0; padding: 10px 12px; margin-bottom: 14px; font-size: 12px; color: #7f1010; line-height: 1.7; }
-  .new-badge { display:inline-block; font-size:11px; font-weight:700; color:#6A1B9A; background:#F3E5F5; border-radius:6px; padding:2px 8px; margin-left:7px; vertical-align:middle; }
   .recv-na { font-size:12px; color:#aaa; padding-top:10px; border-top:0.5px solid #f0f0f0; }
+  .error-box { text-align:center; padding:40px 20px; color:#C62828; font-size:14px; line-height:1.8; }
 </style>
 </head>
 <body>
@@ -72,7 +87,7 @@
 <div class="header">
   <div class="header-top">
     <div class="header-title">🏢 拉法業績追蹤</div>
-    <div class="update-badge">截至 6/29</div>
+    <div class="update-badge" id="updateBadge">載入中…</div>
   </div>
   <div class="tabs">
     <button class="tab active" onclick="setView('all',this)">全員總覽</button>
@@ -81,163 +96,202 @@
   </div>
 </div>
 
-<div class="content">
-  <div class="note-box">
-    📌 6/29 已完成雙月期約 96% 時間進度（最終週）<br>
-    達標門檻依進度調整：≥85% 達標・65–84% 預警・達標門檻依進度調整：≥70% 達標・50–69% 預警・&lt;50% 落後lt;65% 落後<br>
-    同期 YoY 基準：2025年5-6月完整期
-  </div>
-
-  <div class="summary-grid" id="summaryCards"></div>
-
-  <div class="legend">
-    <div class="leg-item"><div class="leg-dot" style="background:#2E7D32"></div>達標 ≥85%（超前進度）</div>
-    <div class="leg-item"><div class="leg-dot" style="background:#E65100"></div>預警 65–84%</div>
-    <div class="leg-item"><div class="leg-dot" style="background:#C62828"></div>落後 &lt;65%</div>
-  </div>
-
-  <div class="sec-hdr" id="secHdr">各業務進度</div>
-  <div id="cardsContainer"></div>
+<div class="content" id="content">
+  <div class="loading">📊 資料載入中…</div>
 </div>
 
 <script>
-const DATA = [
-  { name:"謝明祥", region:"北區", isNew:false,
-    trad:{ sale_rate:110.6, recv_rate:178.2, yoy:8.0, ytd_yoy:9.0 },
-    chain:{ sale_rate:97.8, yoy:10.2, ytd_yoy:31.7 }
-  },
-  { name:"連國廷", region:"北區", isNew:false,
-    trad:{ sale_rate:77.7, recv_rate:169.4, yoy:-15.7, ytd_yoy:-17.0 },
-    chain:{ sale_rate:55.3, yoy:-38.4, ytd_yoy:0.9 }
-  },
-  { name:"洪裕銘", region:"北區", isNew:false,
-    trad:{ sale_rate:83.6, recv_rate:102.4, yoy:-18.3, ytd_yoy:-4.5 },
-    chain:{ sale_rate:7.3, yoy:20.6, ytd_yoy:999 }
-  },
-  { name:"曾瑞真", region:"桃竹", isNew:true,
-    trad:{ sale_rate:86.5, recv_rate:38.9, yoy:-15.5, ytd_yoy:1.9 },
-    chain:{ sale_rate:97.1, yoy:9.4, ytd_yoy:20.6 }
-  },
-  { name:"徐瑞廷", region:"中區", isNew:false,
-    trad:{ sale_rate:89.4, recv_rate:144.1, yoy:-12.7, ytd_yoy:-12.2 },
-    chain:{ sale_rate:82.4, yoy:-7.2, ytd_yoy:7.9 }
-  },
-  { name:"何星諺", region:"中區", isNew:false,
-    trad:{ sale_rate:83.1, recv_rate:139.3, yoy:-2.8, ytd_yoy:-1.3 },
-    chain:{ sale_rate:29.1, yoy:-67.2, ytd_yoy:-1.3 }
-  },
-  { name:"許峯閔", region:"南區", isNew:false,
-    trad:{ sale_rate:69.5, recv_rate:162.0, yoy:-23.7, ytd_yoy:-22.2 },
-    chain:{ sale_rate:34.3, yoy:-63.5, ytd_yoy:-28.1 }
-  },
-  { name:"陳其宏", region:"南區", isNew:false,
-    trad:{ sale_rate:70.7, recv_rate:145.1, yoy:5.3, ytd_yoy:-13.2 },
-    chain:{ sale_rate:65.7, yoy:-27.5, ytd_yoy:27.8 }
-  },
-  { name:"黃翎婕", region:"南區", isNew:true,
-    trad:{ sale_rate:56.2, recv_rate:17.5, yoy:-34.5, ytd_yoy:-19.8 },
-    chain:{ sale_rate:53.2, yoy:-71.4, ytd_yoy:-16.8 }
-  }
-];
+// ★★★ 部署 Apps Script Web App 後，把 URL 貼在這裡 ★★★
+const API_URL = 'https://script.google.com/macros/s/AKfycbzVhAxMmYwK0UDqQyJsieagnYl0YGMsxlZZ8-elFQIzOA2nLyiONd2XC5hw8UJxYXGGuA/exec';
 
+let API_DATA = null;
 let currentView = 'all';
 
-function statusClass(rate) {
-  if (rate >= 85) return 'ok';
-  if (rate >= 65) return 'warn';
+async function loadData() {
+  try {
+    const res = await fetch(API_URL);
+    API_DATA = await res.json();
+    document.getElementById('updateBadge').textContent = '截至 ' + API_DATA.updateDate.slice(5);
+    render();
+  } catch (err) {
+    document.getElementById('content').innerHTML =
+      '<div class="error-box">⚠️ 資料載入失敗<br>請確認網路連線後重新整理<br><span style="font-size:11px;color:#999">' + err.message + '</span></div>';
+  }
+}
+
+function pct(v, signed) {
+  if (v === null || v === undefined) return '-';
+  const p = v * 100;
+  return (signed && p > 0 ? '+' : '') + p.toFixed(1) + '%';
+}
+function statusOf(rate, d) {
+  if (rate === null) return 'bad';
+  if (rate >= d.thresholdOk) return 'ok';
+  if (rate >= d.thresholdBad) return 'warn';
   return 'bad';
 }
 function numClass(v) {
   if (v === null) return 'num-warn';
   if (v >= 0) return 'num-ok';
-  if (v >= -20) return 'num-warn';
+  if (v >= -0.2) return 'num-warn';
   return 'num-bad';
 }
 function barColor(st) { return {ok:'#2E7D32', warn:'#E65100', bad:'#C62828'}[st]; }
-function fmt(v) {
-  if (v === null || v === undefined) return '-';
-  return (v > 0 ? '+' : '') + v.toFixed(1) + '%';
+
+function getRate(p) {
+  if (currentView === 'chain') return p.chainRate;
+  if (currentView === 'trad') return p.tradRate;
+  if (p.tradRate === null && p.chainRate === null) return null;
+  if (p.tradRate === null) return p.chainRate;
+  if (p.chainRate === null) return p.tradRate;
+  return (p.tradRate + p.chainRate) / 2;
 }
-function getSaleRate(d) {
-  if (currentView === 'chain') return d.chain.sale_rate;
-  if (currentView === 'trad') return d.trad.sale_rate;
-  return Math.round((d.trad.sale_rate + d.chain.sale_rate) / 2 * 10) / 10;
+function getYoy(p) {
+  if (currentView === 'chain') return p.chainYoy;
+  if (currentView === 'trad') return p.tradYoy;
+  if (p.tradYoy === null || p.chainYoy === null) return p.tradYoy ?? p.chainYoy;
+  return (p.tradYoy + p.chainYoy) / 2;
+}
+function getForecast(p) {
+  if (currentView === 'chain') return p.chainForecast;
+  if (currentView === 'trad') return p.tradForecast;
+  if (p.tradForecast === null || p.chainForecast === null) return p.tradForecast ?? p.chainForecast;
+  return (p.tradForecast + p.chainForecast) / 2;
 }
 
-function renderSummary() {
-  const sc = document.getElementById('summaryCards');
-  let totSale=0, totRecv=0, totYoy=0, totYtd=0, ytdCnt=0;
-  DATA.forEach(d => {
-    totSale += getSaleRate(d);
-    totRecv += d.trad.recv_rate;
-    totYoy += currentView==='chain' ? d.chain.yoy : currentView==='trad' ? d.trad.yoy : (d.trad.yoy+d.chain.yoy)/2;
-    const ytdv = currentView==='chain' ? (d.chain.ytd_yoy>=900 ? null : d.chain.ytd_yoy)
-               : currentView==='trad' ? d.trad.ytd_yoy
-               : (d.trad.ytd_yoy + (d.chain.ytd_yoy<900 ? d.chain.ytd_yoy : d.trad.ytd_yoy))/2;
-    if (ytdv!==null) { totYtd+=ytdv; ytdCnt++; }
-  });
-  const n=DATA.length;
-  const avgSale=totSale/n, avgRecv=totRecv/n, avgYoy=totYoy/n, avgYtd=totYtd/ytdCnt;
-  function vc(v,hi,lo){ return v>=hi?'c-green':v>=lo?'c-orange':'c-red'; }
+/** 快照趨勢：比對上一次快照的達成率，回傳 delta（百分點） */
+function getTrend(p) {
+  const snaps = API_DATA.snapshots.filter(s => s.name === p.name);
+  if (snaps.length < 2) return null;
+  const prev = snaps[snaps.length - 2];
+  const currRate = getRate(p);
+  const prevRate = currentView === 'chain' ? prev.chainRate
+                 : currentView === 'trad' ? prev.tradRate
+                 : (prev.tradRate !== null && prev.chainRate !== null) ? (prev.tradRate + prev.chainRate) / 2 : (prev.tradRate ?? prev.chainRate);
+  if (currRate === null || prevRate === null) return null;
+  return (currRate - prevRate) * 100;
+}
 
-  const recvSection = currentView==='chain'
+/** 異常聚焦：抽出最需要關注的 2-3 個訊號 */
+function buildAlerts(d) {
+  const items = [];
+  // 1. 達成率墊底者
+  const ranked = [...d.people].filter(p => getRate(p) !== null).sort((a,b) => getRate(a) - getRate(b));
+  if (ranked.length) {
+    const worst = ranked[0];
+    items.push(`📉 <b>${worst.name}</b> ${viewLabel()}達成率 ${pct(getRate(worst))}，全隊最低`);
+  }
+  // 2. 失速者（快照 delta 最負）
+  const trends = d.people.map(p => ({p, t: getTrend(p)})).filter(x => x.t !== null).sort((a,b) => a.t - b.t);
+  if (trends.length && trends[0].t < -3) {
+    items.push(`🔻 <b>${trends[0].p.name}</b> 較上次下滑 ${Math.abs(trends[0].t).toFixed(1)} 個百分點，失速中`);
+  }
+  // 3. 收款嚴重落後（排除新人）
+  const recvBad = d.people.filter(p => !p.isNew && p.tradRecvRate !== null && p.tradRecvRate < d.thresholdBad * 0.7);
+  if (recvBad.length && currentView !== 'chain') {
+    items.push(`💰 <b>${recvBad.map(p=>p.name).join('、')}</b> 傳統收款明顯落後，建議關注`);
+  }
+  return items.slice(0, 3);
+}
+function viewLabel() {
+  return currentView === 'chain' ? '連鎖' : currentView === 'trad' ? '傳統' : '綜合';
+}
+
+function render() {
+  const d = API_DATA;
+  const c = document.getElementById('content');
+  const tp = (d.timeProgress * 100).toFixed(0);
+  const okT = (d.thresholdOk * 100).toFixed(0);
+  const badT = (d.thresholdBad * 100).toFixed(0);
+
+  // Summary
+  const withRate = d.people.filter(p => getRate(p) !== null);
+  const avgRate = withRate.reduce((s,p) => s + getRate(p), 0) / withRate.length;
+  const recvPeople = d.people.filter(p => !p.isNew && p.tradRecvRate !== null);
+  const avgRecv = recvPeople.length ? recvPeople.reduce((s,p) => s + p.tradRecvRate, 0) / recvPeople.length : null;
+  const yoyPeople = d.people.filter(p => getYoy(p) !== null);
+  const avgYoy = yoyPeople.length ? yoyPeople.reduce((s,p) => s + getYoy(p), 0) / yoyPeople.length : null;
+  const fcPeople = d.people.filter(p => getForecast(p) !== null);
+  const avgFc = fcPeople.length ? fcPeople.reduce((s,p) => s + getForecast(p), 0) / fcPeople.length : null;
+
+  function vc(v, hi, lo) { return v === null ? '' : v >= hi ? 'c-green' : v >= lo ? 'c-orange' : 'c-red'; }
+
+  const alerts = buildAlerts(d);
+  const alertHtml = alerts.length ? `
+    <div class="alert-box">
+      <div class="alert-title">⚠️ 本週需關注</div>
+      ${alerts.map(a => `<div class="alert-item">${a}</div>`).join('')}
+    </div>` : '';
+
+  const recvCard = currentView === 'chain'
     ? `<div class="s-val" style="color:#bbb;font-size:16px;padding-top:6px">無收款目標</div>`
-    : `<div class="s-val ${vc(avgRecv,70,50)}">${avgRecv.toFixed(1)}%</div>`;
+    : `<div class="s-val ${vc(avgRecv, d.thresholdOk, d.thresholdBad)}">${pct(avgRecv)}</div>`;
 
-  sc.innerHTML = `
-    <div class="s-card">
-      <div class="s-lbl">5-6月 銷售達成率</div>
-      <div class="s-val ${vc(avgSale,70,50)}">${avgSale.toFixed(1)}%</div>
-      <div class="s-sub">全隊平均</div>
+  let html = `
+    <div class="note-box">
+      📌 期別：${d.periodStart.slice(5)} – ${d.periodEnd.slice(5)}｜時間進度 ${tp}%<br>
+      動態門檻：≥${okT}% 達標・${badT}–${okT}% 預警・<${badT}% 落後（依進度自動調整）
     </div>
-    <div class="s-card">
-      <div class="s-lbl">傳統收款達成率</div>
-      ${recvSection}
-      <div class="s-sub">全隊平均</div>
+    ${alertHtml}
+    <div class="summary-grid">
+      <div class="s-card">
+        <div class="s-lbl">${viewLabel()}銷售達成率</div>
+        <div class="s-val ${vc(avgRate, d.thresholdOk, d.thresholdBad)}">${pct(avgRate)}</div>
+        <div class="s-sub">全隊平均</div>
+      </div>
+      <div class="s-card">
+        <div class="s-lbl">傳統收款達成率</div>
+        ${recvCard}
+        <div class="s-sub">全隊平均（不含新人）</div>
+      </div>
+      <div class="s-card">
+        <div class="s-lbl">同期 YoY</div>
+        <div class="s-val ${vc(avgYoy, 0, -0.2)}">${pct(avgYoy, true)}</div>
+        <div class="s-sub">vs 去年同期進度</div>
+      </div>
+      <div class="s-card">
+        <div class="s-lbl">期末預估達成</div>
+        <div class="s-val ${vc(avgFc, 1, 0.85)}">${pct(avgFc)}</div>
+        <div class="s-sub">照目前速度推估</div>
+      </div>
     </div>
-    <div class="s-card">
-      <div class="s-lbl">同期 YoY</div>
-      <div class="s-val ${vc(avgYoy,0,-20)}">${fmt(avgYoy)}</div>
-      <div class="s-sub">vs 2025年同期</div>
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:#2E7D32"></div>達標 ≥${okT}%</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#E65100"></div>預警 ${badT}–${okT}%</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#C62828"></div>落後 <${badT}%</div>
     </div>
-    <div class="s-card">
-      <div class="s-lbl">年度累計 YTD</div>
-      <div class="s-val ${vc(avgYtd,0,-10)}">${fmt(avgYtd)}</div>
-      <div class="s-sub">2026 vs 2025 同期</div>
-    </div>`;
-}
+    <div class="sec-hdr">${currentView === 'all' ? '各業務進度' : viewLabel() + '通路｜各業務進度'}</div>`;
 
-function renderCards() {
-  const container = document.getElementById('cardsContainer');
   const regions = ['北區','桃竹','中區','南區'];
-  let html = '';
   regions.forEach(reg => {
-    const group = DATA.filter(d => d.region===reg);
+    const group = d.people.filter(p => p.region === reg);
     if (!group.length) return;
     html += `<div class="region-divider">${reg}</div>`;
-    group.forEach(d => {
-      const saleRate = getSaleRate(d);
-      const st = statusClass(saleRate);
-      const yoy = currentView==='chain' ? d.chain.yoy : currentView==='trad' ? d.trad.yoy : (d.trad.yoy+d.chain.yoy)/2;
-      const ytdRaw = currentView==='chain' ? (d.chain.ytd_yoy>=900 ? null : d.chain.ytd_yoy)
-                   : currentView==='trad' ? d.trad.ytd_yoy
-                   : (d.trad.ytd_yoy + (d.chain.ytd_yoy<900 ? d.chain.ytd_yoy : d.trad.ytd_yoy))/2;
-      const ytdDisplay = ytdRaw===null ? '基期低' : fmt(ytdRaw);
-      const ytdCC = ytdRaw===null ? 'num-warn' : numClass(ytdRaw);
+    group.forEach(p => {
+      const rate = getRate(p);
+      const st = statusOf(rate, d);
+      const yoy = getYoy(p);
+      const fc = getForecast(p);
+      const trend = getTrend(p);
+      const newBadge = p.isNew ? `<span class="new-badge">🌱 新人</span>` : '';
       const pillLabel = {ok:'達標',warn:'預警',bad:'落後'}[st];
-      const newBadge = d.isNew ? `<span class="new-badge">🌱 新人</span>` : '';
 
-      const recvSt = statusClass(d.trad.recv_rate);
-      const recvHtml = currentView!=='chain'
-        ? (d.isNew
+      const trendTag = trend === null ? '' :
+        trend >= 0
+          ? `<span class="trend-tag trend-up">▲ ${trend.toFixed(1)}pp</span>`
+          : `<span class="trend-tag trend-down">▼ ${Math.abs(trend).toFixed(1)}pp</span>`;
+
+      const recvSt = statusOf(p.tradRecvRate, d);
+      const recvHtml = currentView !== 'chain'
+        ? (p.isNew
           ? `<div class="recv-na">傳統收款｜到職適用中，暫不計入考核</div>`
           : `<div class="prog-section">
               <div class="prog-row">
                 <span class="prog-label">傳統收款達成</span>
-                <span class="prog-pct num-${recvSt}">${d.trad.recv_rate.toFixed(1)}%</span>
+                <span class="prog-pct num-${recvSt}">${pct(p.tradRecvRate)}</span>
               </div>
               <div class="bar-bg">
-                <div class="bar-fill" style="width:${Math.min(d.trad.recv_rate,100)}%;background:${barColor(recvSt)}"></div>
+                <div class="bar-fill" style="width:${Math.min((p.tradRecvRate||0)*100,100)}%;background:${barColor(recvSt)}"></div>
               </div>
             </div>`)
         : '';
@@ -246,47 +300,48 @@ function renderCards() {
         <div class="p-card">
           <div class="p-top">
             <div>
-              <div class="p-name">${d.name}${newBadge}</div>
-              <div class="p-region-tag">${d.region}</div>
+              <div class="p-name">${p.name}${newBadge}</div>
+              <div class="p-region-tag">${p.region}</div>
             </div>
             <div class="pill pill-${st}">${pillLabel}</div>
           </div>
           <div class="metrics">
             <div class="m-box">
-              <div class="m-num num-${st}">${saleRate.toFixed(1)}%</div>
-              <div class="m-lbl">5-6月<br>銷售達成</div>
+              <div class="m-num num-${st}">${pct(rate)}</div>
+              <div class="m-lbl">${viewLabel()}<br>銷售達成</div>
             </div>
             <div class="m-box">
-              <div class="m-num ${numClass(yoy)}">${fmt(yoy)}</div>
+              <div class="m-num ${numClass(yoy)}">${pct(yoy, true)}</div>
               <div class="m-lbl">同期<br>YoY</div>
             </div>
             <div class="m-box">
-              <div class="m-num ${ytdCC}">${ytdDisplay}</div>
-              <div class="m-lbl">年度<br>YTD</div>
+              <div class="m-num ${fc !== null && fc >= 1 ? 'num-ok' : fc >= 0.85 ? 'num-warn' : 'num-bad'}">${pct(fc)}</div>
+              <div class="m-lbl">期末<br>預估</div>
             </div>
+          </div>
+          <div class="forecast-row">
+            <span class="forecast-arrow">📈</span>
+            <span>較上次快照</span>
+            ${trendTag || '<span style="color:#ccc;margin-left:auto">首次記錄</span>'}
           </div>
           ${recvHtml}
         </div>`;
     });
   });
-  container.innerHTML = html;
+
+  c.innerHTML = html;
 }
 
 function setView(view, el) {
   currentView = view;
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  document.getElementById('secHdr').textContent =
-    view==='chain' ? '連鎖通路｜各業務進度' :
-    view==='trad'  ? '傳統通路｜各業務進度' : '各業務進度';
-  renderSummary();
-  renderCards();
+  if (API_DATA) render();
 }
 
-renderSummary();
-renderCards();
+loadData();
+setInterval(loadData, 5 * 60 * 1000); // 每5分鐘自動刷新
 </script>
 </body>
 </html>
-
 
